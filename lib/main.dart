@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/utils/routes/routes.dart';
+import 'package:my_collection/viewmodel/home_screen_provider.dart';
+import 'package:my_collection/viewmodel/movie_provider.dart';
+import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -14,13 +17,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [],
+      providers: [
+        ChangeNotifierProvider(create: (_)=> MusicProvider()),
+        ChangeNotifierProvider(create: (_)=> MovieProvider()),
+        ChangeNotifierProvider(create: (_)=> HomeScreenProvider())
+      ],
       child: MaterialApp(
         title: "My Collection",
         theme: ThemeData(
           primarySwatch: Colors.blue
         ),
-        initialRoute: RouteNames.login,
+        initialRoute: RouteNames.home,
         onGenerateRoute: Routes.generateRoute,
       ),
     );
