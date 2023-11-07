@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
               showSelectedLabels: false,
               selectedLabelStyle: const TextStyle(fontSize: 8.0),
               currentIndex: provider.selectedIndex,
-              onTap: provider.onBottomNavIndexChanged,
+              onTap: (_)=>provider.onBottomNavIndexChanged(_,context),
               items: [
                 BottomNavigationBarItem(
                     icon: Column(
