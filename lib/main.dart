@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_)=> LoginProvider()),
         ChangeNotifierProvider(create: (_)=> SignupProvider()),
+        ChangeNotifierProvider(create: (_)=> DarkThemeProvider()),
         ChangeNotifierProvider(create: (_)=> ApiHelper()),
         ChangeNotifierProvider(create: (_)=> MusicProvider()),
         ChangeNotifierProvider(create: (_)=> MovieProvider()),
@@ -30,9 +31,8 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: "My Collection",
-        theme: ThemeData(
-          primarySwatch: Colors.blue
-        ),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         initialRoute: RouteNames.home,
         onGenerateRoute: Routes.generateRoute,
       ),
