@@ -39,6 +39,12 @@ dependencies:
   provider: 6.0.5
   dio: 5.3.3
   connectivity_plus: 5.0.1
+  dartz: 0.10.1
+  shimmer: 3.0.0
+  cached_network_image: 3.2.3
+  shared_preferences: 2.2.2
+  firebase_core: 1.19.1
+  firebase_auth: 3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -64,4 +70,9 @@ flutter:
 
   assets:
    - assets/icons/
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik-Italic-VariableFont_wght.ttf
+        - asset: assets/fonts/Rubik-VariableFont_wght.ttf
 
