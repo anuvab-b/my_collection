@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/repository/movies/movie_repository.dart';
@@ -12,11 +11,15 @@ class MovieProvider extends ChangeNotifier{
   List<MovieListModel> popularMovieList = List.empty(growable: true);
   List<MovieListModel> nowPlayingMovieList = List.empty(growable: true);
   List<MovieListModel> topRatedMovieList = List.empty(growable: true);
+  PageController pageController = PageController(initialPage: 0);
 
   bool isUpcomingLoading = false;
   bool isPopularLoading = false;
   bool isNowPlayingLoading = false;
   bool isTopRatedLoading = false;
+
+  int pageIndex = 0;
+  int selectedPageIndex = 0;
 
   Future<void> getUpcomingMovies() async {
     isUpcomingLoading = true;
@@ -62,6 +65,20 @@ class MovieProvider extends ChangeNotifier{
     result.fold((l){}, (r){
       topRatedMovieList = r.results!;
     });
+    notifyListeners();
+  }
+
+  storeIndex(int value){
+    pageIndex = value;
+    if(pageIndex == 0) {
+      selectedPageIndex = pageIndex;
+    } else if(nowPlayingMovieList.length<3) {
+      selectedPageIndex = pageIndex;
+    } else if (nowPlayingMovieList.length>=3 && pageIndex >= 1 && pageIndex < nowPlayingMovieList.length-1) {
+      selectedPageIndex = 1;
+    } else {
+      selectedPageIndex = 2;
+    }
     notifyListeners();
   }
 
