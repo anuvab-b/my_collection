@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
+import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -24,9 +25,7 @@ class MoviesScreen extends StatelessWidget {
                     child: const BannerPlaceholder())
                 : Column(children: [
                     SizedBox(
-                      height: MediaQuery.of(context)
-                          .size
-                          .width * 0.6,
+                      height: MediaQuery.of(context).size.width * 0.6,
                       child: PageView(
                           clipBehavior: Clip.none,
                           controller: provider.pageController,
@@ -50,7 +49,6 @@ class MoviesScreen extends StatelessWidget {
                                                 width: MediaQuery.of(context)
                                                     .size
                                                     .width,
-
                                                 child: CachedNetworkImage(
                                                   fit: BoxFit.fill,
                                                   progressIndicatorBuilder:
@@ -88,12 +86,22 @@ class MoviesScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30.0),
                     // shape: BoxShape.circle,
                     color: index == provider.selectedPageIndex
-                        ? Theme.of(context).primaryColor
-                        : Colors.grey,
+                        ? Theme.of(context).highlightColor
+                        : Theme.of(context).primaryColorLight,
                   ),
                 );
               }),
             ),
+            const SizedBox(height: 16.0),
+            provider.isNowPlayingLoading
+                ? Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.grey.shade100,
+                enabled: true,
+                child: const BannerPlaceholder())
+                : HorizontalPosterListViewSection(
+                movieList: provider.nowPlayingMovieList,
+                sectionHeader: "Now Playing"),
             const SizedBox(height: 16.0),
             provider.isPopularLoading
                 ? Shimmer.fromColors(
@@ -101,7 +109,9 @@ class MoviesScreen extends StatelessWidget {
                     highlightColor: Colors.grey.shade100,
                     enabled: true,
                     child: const BannerPlaceholder())
-                : Text("Loaded Popular"),
+                : HorizontalPosterListViewSection(
+                    movieList: provider.popularMovieList,
+                    sectionHeader: "Popular"),
             const SizedBox(height: 16.0),
             provider.isTopRatedLoading
                 ? Shimmer.fromColors(
@@ -109,7 +119,9 @@ class MoviesScreen extends StatelessWidget {
                     highlightColor: Colors.grey.shade100,
                     enabled: true,
                     child: const BannerPlaceholder())
-                : Text("Loaded Top Rated"),
+                : HorizontalPosterListViewSection(
+                    movieList: provider.topRatedMovieList,
+                    sectionHeader: "Top Rated"),
             const SizedBox(height: 16.0),
             provider.isUpcomingLoading
                 ? Shimmer.fromColors(
@@ -117,10 +129,71 @@ class MoviesScreen extends StatelessWidget {
                     highlightColor: Colors.grey.shade100,
                     enabled: true,
                     child: const BannerPlaceholder())
-                : Text("Loaded Upcoming")
+                : HorizontalPosterListViewSection(
+                    movieList: provider.upcomingMovieList,
+                    sectionHeader: "Upcoming Releases",
+                  )
           ]),
         );
       },
+    );
+  }
+}
+
+class HorizontalPosterListViewSection extends StatelessWidget {
+  final List<MovieListModel> movieList;
+  final String? sectionHeader;
+
+  const HorizontalPosterListViewSection(
+      {Key? key, required this.movieList, this.sectionHeader})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            sectionHeader ?? "",
+            style: TextStyle(
+                color: Theme.of(context).primaryColorLight,
+                fontSize: 24.0,
+                fontWeight: FontWeight.w900,
+                fontFamily: "Poppins"),
+          ),
+          const SizedBox(height: 8.0),
+          SizedBox(
+            height: 160,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: movieList.length,
+                itemBuilder: (ctx, index) {
+                  MovieListModel popular = movieList[index];
+                  return Container(
+                      margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
+                      height: 160,
+                      width: 160,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                              value: progress.progress,
+                            ),
+                          ),
+                          imageUrl:
+                              "${ApiEndpoints.tmdbPosterPath}${popular.posterPath}",
+                        ),
+                      ));
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
