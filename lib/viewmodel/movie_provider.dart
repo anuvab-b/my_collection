@@ -11,6 +11,9 @@ class MovieProvider extends ChangeNotifier{
   List<MovieListModel> popularMovieList = List.empty(growable: true);
   List<MovieListModel> nowPlayingMovieList = List.empty(growable: true);
   List<MovieListModel> topRatedMovieList = List.empty(growable: true);
+  List<MovieListModel> yourBookmarksList = List.empty(growable: true);
+  List<MovieListModel> yourLikedList = List.empty(growable: true);
+  List<MovieListModel> yourCurrentlyWatchingList = List.empty(growable: true);
   PageController pageController = PageController(initialPage: 0);
 
   bool isUpcomingLoading = false;
