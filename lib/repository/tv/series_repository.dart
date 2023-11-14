@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/data/network/network.dart';
-import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
+import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
 
-class MovieRepository{
-
-  Future<Either<String,TmdbMovieResponseModel>> fetchNowPlayingMovies() async{
-    TmdbMovieResponseModel nowPlayingModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/now_playing";
+class SeriesRepository{
+  Future<Either<String,TmdbTvResponseModel>> fetchAiringToday() async{
+    TmdbTvResponseModel airingTodayModel;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/airing_today";
     String token = ApiEndpoints.tmdbToken;
 
     try {
@@ -15,11 +14,11 @@ class MovieRepository{
         "Authorization": "Bearer $token"
       }, method: HTTPMETHOD.GET);
       if (res.statusCode == 200) {
-        nowPlayingModel = TmdbMovieResponseModel.fromJson(res.data);
-        return right(nowPlayingModel);
+        airingTodayModel = TmdbTvResponseModel.fromJson(res.data);
+        return right(airingTodayModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -27,20 +26,20 @@ class MovieRepository{
     }
   }
 
-  Future<Either<String,TmdbMovieResponseModel>> fetchPopularMovies() async{
-    TmdbMovieResponseModel upcomingModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/popular";
+  Future<Either<String,TmdbTvResponseModel>> fetchOnTheAir() async{
+    TmdbTvResponseModel onTheAirModel;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/on_the_air";
     String token = ApiEndpoints.tmdbToken;
     try {
       var res = await ApiHelper().request(url: url, headers: {
         "Authorization": "Bearer $token"
       }, method: HTTPMETHOD.GET);
       if (res.statusCode == 200) {
-        upcomingModel = TmdbMovieResponseModel.fromJson(res.data);
-        return right(upcomingModel);
+        onTheAirModel = TmdbTvResponseModel.fromJson(res.data);
+        return right(onTheAirModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -48,20 +47,20 @@ class MovieRepository{
     }
   }
 
-  Future<Either<String,TmdbMovieResponseModel>> fetchUpcomingMovies()async{
-    TmdbMovieResponseModel upcomingModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/top_rated";
+  Future<Either<String,TmdbTvResponseModel>> fetchPopular()async{
+    TmdbTvResponseModel popularModel;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/popular";
     String token = ApiEndpoints.tmdbToken;
     try {
       var res = await ApiHelper().request(url: url, headers: {
         "Authorization": "Bearer $token"
       }, method: HTTPMETHOD.GET);
       if (res.statusCode == 200) {
-        upcomingModel = TmdbMovieResponseModel.fromJson(res.data);
-        return right(upcomingModel);
+        popularModel = TmdbTvResponseModel.fromJson(res.data);
+        return right(popularModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -69,20 +68,20 @@ class MovieRepository{
     }
   }
 
-  Future<Either<String,TmdbMovieResponseModel>> fetchTopRatedMovies()async{
-    TmdbMovieResponseModel topRatedModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/upcoming";
+  Future<Either<String,TmdbTvResponseModel>> fetchTopRatedSeries()async{
+    TmdbTvResponseModel topRatedModel;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/top_rated";
     String token = ApiEndpoints.tmdbToken;
     try {
       var res = await ApiHelper().request(url: url, headers: {
         "Authorization": "Bearer $token"
       }, method: HTTPMETHOD.GET);
       if (res.statusCode == 200) {
-        topRatedModel = TmdbMovieResponseModel.fromJson(res.data);
+        topRatedModel = TmdbTvResponseModel.fromJson(res.data);
         return right(topRatedModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
