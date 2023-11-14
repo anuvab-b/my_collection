@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 class BannerPlaceholder extends StatelessWidget {
-  const BannerPlaceholder({Key? key}) : super(key: key);
+  final Color backgroundColor;
+  final double width;
+  final double height;
+  final double borderRadius;
+  const BannerPlaceholder({Key? key,this.backgroundColor = Colors.white,this.width = 200, this.height = 200,this.borderRadius = 12.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 200.0,
-      margin: const EdgeInsets.all(16.0),
+      width: width,
+      height: height,
+      margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.0),
-        color: Colors.white,
+        borderRadius: BorderRadius.circular(borderRadius),
+        color: backgroundColor,
       ),
     );
   }
