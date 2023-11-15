@@ -62,6 +62,11 @@ class _MyAppState extends State<MyApp> {
           // darkTheme: ThemeData.dark(),
           initialRoute: RouteNames.home,
           onGenerateRoute: Routes.generateRoute,
+          // If you set routes, it ignores onGenerateRoute
+          // routes: {
+          //   RouteNames.home: (context) => const HomeScreen(),
+          //   RouteNames.musicSearch: (context) => const MusicSearchScreen()
+          // },
         );
       }),
     );

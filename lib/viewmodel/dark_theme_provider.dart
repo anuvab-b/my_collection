@@ -3,7 +3,7 @@ import 'package:my_collection/utils/dark_theme_preference.dart';
 
 class DarkThemeProvider extends ChangeNotifier{
   DarkThemePreference darkThemePreference = DarkThemePreference();
-  bool _isDarkTheme = false;
+  bool _isDarkTheme = true;
 
   bool get darkTheme => _isDarkTheme;
 
