@@ -5,7 +5,7 @@ import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'widgets/placeholders/placeholder.dart';
+import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
 
 class MoviesScreen extends StatelessWidget {
   const MoviesScreen({Key? key}) : super(key: key);
