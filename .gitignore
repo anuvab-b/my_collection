@@ -42,3 +42,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Project specific
+/android/app/google-services.json
+
+/lib/data/network/api_endpoints.dart
+/lib/data/network/error.dart
+/lib/data/network/network.dart
