@@ -1,5 +1,6 @@
 import 'package:jiffy/jiffy.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
+import 'package:my_collection/viewmodel/music_provider.dart';
 
 class DataUtils {
   static String getBookCategoryStringFromEnum(BookCategories category) {
@@ -22,6 +23,28 @@ class DataUtils {
     return filterCategories == BookFilterCategories.newest
         ? "Newest"
         : "Relevance";
+  }
+
+  static String getMusicSearchFilterCategoryFromEnum(
+      MusicSearchCategories category) {
+    switch (category) {
+      case MusicSearchCategories.artist:
+        return "artist";
+      case MusicSearchCategories.album:
+        return "album";
+      case MusicSearchCategories.audiobook:
+        return "audiobook";
+      case MusicSearchCategories.episode:
+        return "episode";
+      case MusicSearchCategories.playlist:
+        return "playlist";
+      case MusicSearchCategories.show:
+        return "show";
+      case MusicSearchCategories.track:
+        return "track";
+      default:
+        return "";
+    }
   }
 
   static String formatDate(String date,
