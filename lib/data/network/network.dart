@@ -42,14 +42,15 @@ class ApiHelper extends ChangeNotifier{
           response = await baseAPI.get(url, options: Options(headers: headers));
           break;
         case HTTPMETHOD.POST:
-          response = await baseAPI.post(url, data: data);
+          response = await baseAPI.post(url, data: data,options: Options(headers: headers));
           break;
         default:
       }
+      debugPrint("<-- Network : After response-->");
     final responseMessage = response.data;
     final responseData = response.data;
     return ApiResponse(
-        success: true, message: responseMessage, data: responseData);
+      statusCode: response.statusCode, success: true, message: responseMessage, data: responseData);
     } on DioException catch(e){
       return ErrorHandler.response(e);
     }
