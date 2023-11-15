@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
-import 'package:my_collection/viewmodel/books/books_repository.dart';
+import 'package:my_collection/repository/books_repository.dart';
 
 enum BookCategories {
   selfImprovement,

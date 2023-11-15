@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/res/assets.dart';
-import 'package:my_collection/view/books_screen.dart';
-import 'package:my_collection/view/movies_screen.dart';
-import 'package:my_collection/view/music_screen.dart';
-import 'package:my_collection/view/series_screen.dart';
+import 'package:my_collection/view/books/books_screen.dart';
+import 'package:my_collection/view/movies/movies_screen.dart';
+import 'package:my_collection/view/music/music_screen.dart';
+import 'package:my_collection/view/series/series_screen.dart';
 import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +22,9 @@ class HomeScreen extends StatelessWidget {
                 // color: kSelectedListItem,
                 onSelected: (value) {
                   // controller.onMenuItemSelected(value);
-                  if(value == 0){
-                    var themeChange = Provider.of<DarkThemeProvider>(context,listen: false);
+                  if (value == 0) {
+                    var themeChange =
+                        Provider.of<DarkThemeProvider>(context, listen: false);
                     themeChange.darkTheme = !themeChange.darkTheme;
                   }
                 },
@@ -46,7 +47,8 @@ class HomeScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Icon(Icons.change_circle_rounded,color: Theme.of(context).indicatorColor),
+                                Icon(Icons.change_circle_rounded,
+                                    color: Theme.of(context).indicatorColor),
                                 const SizedBox(width: 12.0),
                                 const Expanded(
                                   child: Text("Change Theme",
@@ -73,61 +75,67 @@ class HomeScreen extends StatelessWidget {
         }),
         bottomNavigationBar:
             Consumer<HomeScreenProvider>(builder: (context, provider, child) {
-          return BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            showUnselectedLabels: false,
-            backgroundColor: Colors.white,
-            showSelectedLabels: false,
-            selectedLabelStyle: const TextStyle(fontSize: 8.0),
-            currentIndex: provider.selectedIndex,
-            onTap: (_) => provider.onBottomNavIndexChanged(_, context),
-            items: [
-              BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      Image.asset(icBook, height: 24.0, width: 24.0),
-                      const Text("Books",
-                          style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  label: "Books"),
-              BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      Image.asset(icMovie, height: 24.0, width: 24.0),
-                      const Text("Movies",
-                          style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  label: "Movies"),
-              BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      Image.asset(icSeries, height: 24.0, width: 24.0),
-                      const Text("Series",
-                          style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                  label: "Series"),
-              BottomNavigationBarItem(
-                  icon: Column(
-                    children: [
-                      Image.asset(icMusic, height: 24.0, width: 24.0),
-                      const Text("Music",
-                          style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w900)),
-                    ],
-                  ),
-                  label: "Music")
-            ],
-          );
+          return ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                showUnselectedLabels: false,
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.4),
+                showSelectedLabels: false,
+                selectedLabelStyle: const TextStyle(fontSize: 8.0),
+                currentIndex: provider.selectedIndex,
+                onTap: (_) => provider.onBottomNavIndexChanged(_, context),
+                items: [
+                  BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          Image.asset(icBook, height: 24.0, width: 24.0),
+                          Text("Books",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      label: "Books"),
+                  BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          Image.asset(icMovie, height: 24.0, width: 24.0),
+                          Text("Movies",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      label: "Movies"),
+                  BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          Image.asset(icSeries, height: 24.0, width: 24.0),
+                          Text("Series",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      label: "Series"),
+                  BottomNavigationBarItem(
+                      icon: Column(
+                        children: [
+                          Image.asset(icMusic, height: 24.0, width: 24.0),
+                          Text("Music",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      label: "Music")
+                ],
+              ));
         }),
       ),
     );

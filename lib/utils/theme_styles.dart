@@ -26,7 +26,7 @@ class Styles {
                 statusBarBrightness:
                     isDarkTheme ? Brightness.dark : Brightness.light)),
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red).copyWith(
-            background: isDarkTheme ? Colors.black : const Color(0xFFF1F5FB),
+            background: isDarkTheme ? AppColors.darkThemePrimary : const Color(0xFFF1F5FB),
             brightness: isDarkTheme ? Brightness.dark : Brightness.light));
   }
 }
