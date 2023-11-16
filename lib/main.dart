@@ -1,9 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/data/network/network.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/utils/routes/routes.dart';
 import 'package:my_collection/utils/theme_styles.dart';
-import 'package:my_collection/view/home_screen.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
@@ -14,7 +14,9 @@ import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:my_collection/viewmodel/signup/signup_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -43,32 +45,31 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider()),
-        ChangeNotifierProvider(create: (_) => SignupProvider()),
-        ChangeNotifierProvider(create: (_) => ApiHelper()),
-        ChangeNotifierProvider(create: (_) => themeChangeProvider),
-        ChangeNotifierProvider(create: (_) => MusicProvider()),
-        ChangeNotifierProvider(create: (_) => MovieProvider()),
-        ChangeNotifierProvider(create: (_) => BooksProvider()),
-        ChangeNotifierProvider(create: (_) => SeriesProvider()),
-        ChangeNotifierProvider(create: (_) => HomeScreenProvider())
-      ],
-      child: Consumer<DarkThemeProvider>(builder: (ctx, provider, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: "My Collection",
-          theme: Styles.themeData(provider.darkTheme, context),
-          // darkTheme: ThemeData.dark(),
-          initialRoute: RouteNames.home,
-          onGenerateRoute: Routes.generateRoute,
-          // If you set routes, it ignores onGenerateRoute
-          // routes: {
-          //   RouteNames.home: (context) => const HomeScreen(),
-          //   RouteNames.musicSearch: (context) => const MusicSearchScreen()
-          // },
-        );
-      }),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (_) => LoginProvider()),
+          ChangeNotifierProvider(create: (_) => SignupProvider()),
+          ChangeNotifierProvider(create: (_) => ApiHelper()),
+          ChangeNotifierProvider(create: (_) => themeChangeProvider),
+          ChangeNotifierProvider(create: (_) => MusicProvider()),
+          ChangeNotifierProvider(create: (_) => MovieProvider()),
+          ChangeNotifierProvider(create: (_) => BooksProvider()),
+          ChangeNotifierProvider(create: (_) => SeriesProvider()),
+          ChangeNotifierProvider(create: (_) => HomeScreenProvider())
+        ],
+        child: Consumer<DarkThemeProvider>(builder: (ctx, provider, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: "My Collection",
+              theme: Styles.themeData(provider.darkTheme, context),
+              // darkTheme: ThemeData.dark(),
+              initialRoute: RouteNames.signup,
+              onGenerateRoute: Routes.generateRoute,// If you set routes, it ignores onGenerateRoute
+              // routes: {
+              //   RouteNames.home: (context) => const HomeScreen(),
+              //   RouteNames.musicSearch: (context) => const MusicSearchScreen()
+              // },
+            );
+          },
+        ));
   }
 }
