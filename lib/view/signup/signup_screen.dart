@@ -32,6 +32,49 @@ class SignupScreen extends StatelessWidget {
                           decoration: const InputDecoration(
                               labelText: "Password*",
                               hintText: "Enter a password")),
+                      const SizedBox(height: 8.0),
+                      TextButton(
+                        onPressed: () async {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              barrierColor: Colors.transparent,
+                              builder: (ctx) {
+                                return const CommonLoader();
+                              });
+                          User? user =
+                              await provider.onSignupButtonPress(context);
+                          if (context.mounted) {
+                            Navigator.of(context).pop();
+                          }
+                          if (user != null) {
+                            if (context.mounted) {
+                              Navigator.pushNamed(context, RouteNames.home);
+                            }
+                          } else {
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(
+                                  provider?.signUpErrMessage ?? "",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                backgroundColor:
+                                    Theme.of(context).primaryColorLight,
+                              ));
+                            }
+                          }
+                        },
+                        style: TextButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor:
+                                Theme.of(context).primaryColorLight),
+                        child: const Text(
+                          'Signup',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
                     ],
                   ),
                   Column(children: [
