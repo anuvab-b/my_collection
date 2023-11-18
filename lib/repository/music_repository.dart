@@ -31,7 +31,7 @@ class MusicRepository {
   }
 
   Future<Either<String, SpotifySearchResponseModel>> getSpotifySearchResults(
-      String query, String queryType,
+      String accessToken, String query, String queryType,
       {int offset = 0, int limit = 20}) async {
     SpotifySearchResponseModel spotifySearchResponseModel;
     // String url =
@@ -40,8 +40,8 @@ class MusicRepository {
         "${ApiEndpoints.spotifyBaseUrl}search?q=$query&type=$queryType";
     try {
       var res =
-      await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
-        "Authorization": "Bearer",
+          await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
+        "Authorization": "Bearer $accessToken",
       });
       if (res.statusCode == 200) {
         spotifySearchResponseModel =
