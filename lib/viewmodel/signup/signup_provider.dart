@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 class SignupProvider extends ChangeNotifier {
   late TextEditingController emailController;
   late TextEditingController passwordController;
-  late TextEditingController nameController;
+  late TextEditingController userNameController;
   late FirebaseAuth firebaseAuth;
+
+  late FocusNode emailFocusNode;
+  late FocusNode passwordFocusNode;
+  late FocusNode userNameFocusNode;
   String? signUpErrMessage;
 
   SignupProvider() {
@@ -15,16 +19,21 @@ class SignupProvider extends ChangeNotifier {
   initData() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    nameController = TextEditingController();
+    userNameController = TextEditingController();
+    emailFocusNode = FocusNode();
+    passwordFocusNode = FocusNode();
+    userNameFocusNode = FocusNode();
     firebaseAuth = FirebaseAuth.instance;
   }
+
   Future<User?> onSignupButtonPress(BuildContext context) async {
     User? user;
     try {
-      UserCredential newUser = await firebaseAuth.createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
+      UserCredential newUser =
+          await firebaseAuth.createUserWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text);
       user = newUser.user;
-      await user!.updateDisplayName(nameController.text);
+      await user!.updateDisplayName(userNameController.text);
       await user.reload();
       user = firebaseAuth.currentUser;
       emailController.clear();
@@ -41,5 +50,22 @@ class SignupProvider extends ChangeNotifier {
       signUpErrMessage = e.toString();
     }
     return user;
+  }
+
+  bool isSignUpFormValidated() {
+    return !(userNameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty);
+  }
+
+  onSignUpTextFieldChange(String text){
+    notifyListeners();
+  }
+
+  unFocusNodes(){
+    emailFocusNode.unfocus();
+    passwordFocusNode.unfocus();
+    userNameFocusNode.unfocus();
+    notifyListeners();
   }
 }
