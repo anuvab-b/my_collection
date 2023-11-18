@@ -62,7 +62,7 @@ class SignupScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16.0),
                   TextFormField(
-                    focusNode: provider.passwordFocusNode,
+                      focusNode: provider.passwordFocusNode,
                       onChanged: provider.onSignUpTextFieldChange,
                       controller: provider.passwordController,
                       obscureText: true,
@@ -76,16 +76,6 @@ class SignupScreen extends StatelessWidget {
                               color: Theme.of(context).primaryColor),
                           labelText: "Password*",
                           hintText: "Enter your password")),
-                  const SizedBox(height: 32.0),
-                  Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).primaryColorLight),
-                      )),
                   const SizedBox(height: 32.0),
                   SizedBox(
                     height: 50,
@@ -108,7 +98,10 @@ class SignupScreen extends StatelessWidget {
                               }
                               if (user != null) {
                                 if (context.mounted) {
-                                  Navigator.pushNamed(context, RouteNames.home);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      RouteNames.home,
+                                      (Route<dynamic> route) => false);
                                 }
                               } else {
                                 if (context.mounted) {
@@ -159,7 +152,8 @@ class SignupScreen extends StatelessWidget {
                     const SizedBox(width: 8.0),
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, RouteNames.login);
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            RouteNames.login, (Route<dynamic> route) => false);
                       },
                       child: Text(
                         "Login here",
