@@ -24,16 +24,18 @@ class MusicProvider extends ChangeNotifier {
   late TextEditingController textEditingController;
   late SpotifySearchResponseModel spotifySearchResponseModel;
   MusicSearchCategories selectedFilterCategory = MusicSearchCategories.track;
-  Map<String,Either<String, SpotifySearchResponseModel>?> musicSearchMap = {};
+  Map<String, Either<String, SpotifySearchResponseModel>?> musicSearchMap = {};
 
-  Future<Either<String, SpotifySearchResponseModel>?> getMusicBySearch(String query, String filterType) async {
-    if(musicSearchMap.containsKey(query)) {
+  String accessToken = "";
+
+  Future<Either<String, SpotifySearchResponseModel>?> getMusicBySearch(
+      String query, String filterType) async {
+    if (musicSearchMap.containsKey(query)) {
       return musicSearchMap[query];
-    }
-    else {
+    } else {
       var result = await musicRepository.getSpotifySearchResults(
-          query, "album,track,artist,playlist");
-      if(query.isNotEmpty) {
+          accessToken, query, "album,track,artist,playlist");
+      if (query.isNotEmpty) {
         musicSearchMap.putIfAbsent(query, () => result);
       }
       result.fold((l) {}, (r) {
@@ -43,12 +45,15 @@ class MusicProvider extends ChangeNotifier {
     }
   }
 
-  void onFilterCategoryChanged(MusicSearchCategories newCategory){
+  void onFilterCategoryChanged(MusicSearchCategories newCategory) {
     selectedFilterCategory = newCategory;
     notifyListeners();
   }
 
-  Future<void> getToken() async{
+  Future<void> getToken() async {
     var result = await musicRepository.getSpotifyToken();
+    result.fold((l) {}, (r) {
+      accessToken = r;
+    });
   }
 }

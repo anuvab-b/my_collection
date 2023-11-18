@@ -50,7 +50,7 @@ class ApiHelper extends ChangeNotifier{
     final responseMessage = response.data;
     final responseData = response.data;
     return ApiResponse(
-      statusCode: response.statusCode, success: true, message: responseMessage, data: responseData);
+      statusCode: response.statusCode, success: true, message: "", data: responseData);
     } on DioException catch(e){
       return ErrorHandler.response(e);
     }
