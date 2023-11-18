@@ -11,88 +11,289 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Sign Up")),
+        appBar: AppBar(
+            foregroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Theme.of(context).primaryColorDark,
+            title: const Center(
+                child: Text(
+              "Signup",
+              style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: "Poppins"),
+            ))),
         body: Consumer<SignupProvider>(builder: (context, provider, child) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Column(
-                    children: [
-                      TextFormField(
-                        controller: provider.emailController,
-                        decoration: const InputDecoration(
-                            labelText: "Email*",
-                            hintText: "Enter an email address"),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    focusNode: provider.userNameFocusNode,
+                    onChanged: provider.onSignUpTextFieldChange,
+                    controller: provider.userNameController,
+                    decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.person_outline,
+                            color: Theme.of(context).primaryColor),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                            )),
+                        labelText: "Username*",
+                        hintText: "Enter your username"),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    focusNode: provider.emailFocusNode,
+                    onChanged: provider.onSignUpTextFieldChange,
+                    controller: provider.emailController,
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                            )),
+                        prefixIcon: Icon(Icons.mail_outline_rounded,
+                            color: Theme.of(context).primaryColor),
+                        labelText: "Email*",
+                        hintText: "Enter your email address"),
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    focusNode: provider.passwordFocusNode,
+                      onChanged: provider.onSignUpTextFieldChange,
+                      controller: provider.passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              )),
+                          prefixIcon: Icon(Icons.lock_outline_rounded,
+                              color: Theme.of(context).primaryColor),
+                          labelText: "Password*",
+                          hintText: "Enter your password")),
+                  const SizedBox(height: 32.0),
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColorLight),
+                      )),
+                  const SizedBox(height: 32.0),
+                  SizedBox(
+                    height: 50,
+                    width: 200,
+                    child: TextButton(
+                      onPressed: provider.isSignUpFormValidated()
+                          ? () async {
+                              provider.unFocusNodes();
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  barrierColor: Colors.transparent,
+                                  builder: (ctx) {
+                                    return const CommonLoader();
+                                  });
+                              User? user =
+                                  await provider.onSignupButtonPress(context);
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                              if (user != null) {
+                                if (context.mounted) {
+                                  Navigator.pushNamed(context, RouteNames.home);
+                                }
+                              } else {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(
+                                      provider?.signUpErrMessage ?? "",
+                                      style: TextStyle(
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                    backgroundColor:
+                                        Theme.of(context).primaryColorLight,
+                                  ));
+                                }
+                              }
+                            }
+                          : null,
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16), // <-- Radius
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Theme.of(context).primaryColorLight),
+                      child: const Text(
+                        'Signup',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w900),
                       ),
-                      TextFormField(
-                          controller: provider.passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                              labelText: "Password*",
-                              hintText: "Enter a password")),
-                      const SizedBox(height: 8.0),
-                      TextButton(
-                        onPressed: () async {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              barrierColor: Colors.transparent,
-                              builder: (ctx) {
-                                return const CommonLoader();
-                              });
-                          User? user =
-                              await provider.onSignupButtonPress(context);
-                          if (context.mounted) {
-                            Navigator.of(context).pop();
-                          }
-                          if (user != null) {
-                            if (context.mounted) {
-                              Navigator.pushNamed(context, RouteNames.home);
-                            }
-                          } else {
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                  provider?.signUpErrMessage ?? "",
-                                  style: TextStyle(
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                                backgroundColor:
-                                    Theme.of(context).primaryColorLight,
-                              ));
-                            }
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            foregroundColor:
-                                Theme.of(context).primaryColorLight),
-                        child: const Text(
-                          'Signup',
-                          style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Flexible(
+                      child: Text(
+                        "Already have an account ?",
+                        maxLines: 1,
+                        style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColorLight),
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, RouteNames.login);
+                      },
+                      child: Text(
+                        "Login here",
+                        style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    ),
+                  ]),
+                  const SizedBox(height: 32.0),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Divider(
+                              color: Theme.of(context).primaryColor,
+                              thickness: 2)),
+                      const SizedBox(width: 8.0),
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4.0),
+                          color: Theme.of(context).primaryColor,
                         ),
-                      )
+                        child: Text(
+                          "OR",
+                          maxLines: 1,
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Poppins"),
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                          child: Divider(
+                        color: Theme.of(context).primaryColor,
+                        thickness: 2,
+                      ))
                     ],
                   ),
-                  Column(children: [
-                    const Text("Already have an account? Login here"),
-                    TextButton(
-                      onPressed: () {
-                        //     RouteNames.login, (Route<dynamic> route) => false);
-                        Navigator.pushNamed(context,
-                            RouteNames.login);
-                      },
+                  const SizedBox(height: 32.0),
+                  SizedBox(
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () async {},
                       style: TextButton.styleFrom(
-                          padding: const EdgeInsets.all(16.0),
-                          foregroundColor: Theme.of(context).primaryColor,
-                          textStyle: const TextStyle(fontSize: 20)),
-                      child: const Text("Login"),
-                    )
-                  ]),
-                ]),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16), // <-- Radius
+                          ),
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          foregroundColor: Theme.of(context).primaryColor),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.g_mobiledata),
+                          const SizedBox(width: 32.0),
+                          Text(
+                            "Sign in with Google",
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () async {},
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16), // <-- Radius
+                          ),
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          foregroundColor: Theme.of(context).primaryColor),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.facebook),
+                          const SizedBox(width: 32.0),
+                          Text(
+                            "Sign in with Facebook",
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    height: 50,
+                    child: TextButton(
+                      onPressed: () async {},
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(16), // <-- Radius
+                          ),
+                          backgroundColor: Theme.of(context).primaryColorLight,
+                          foregroundColor: Theme.of(context).primaryColor),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.apple),
+                          const SizedBox(width: 32.0),
+                          Text(
+                            "Sign in with Apple",
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
         }));
   }
