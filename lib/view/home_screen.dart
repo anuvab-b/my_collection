@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/res/assets.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/books/books_screen.dart';
 import 'package:my_collection/view/movies/movies_screen.dart';
 import 'package:my_collection/view/music/music_screen.dart';
 import 'package:my_collection/view/series/series_screen.dart';
+import 'package:my_collection/viewmodel/auth_provider.dart';
 import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +28,11 @@ class HomeScreen extends StatelessWidget {
                     var themeChange =
                         Provider.of<DarkThemeProvider>(context, listen: false);
                     themeChange.darkTheme = !themeChange.darkTheme;
+                  } else if (value == 1) {
+                    AuthProvider authProvider = context.read<AuthProvider>();
+                    authProvider.logOutUser();
+                    Navigator.pushNamedAndRemoveUntil(context, RouteNames.login,
+                        (Route<dynamic> route) => false);
                   }
                 },
                 offset: Offset(0.0, AppBar().preferredSize.height),
@@ -57,6 +64,25 @@ class HomeScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w500)),
                                 ),
                               ],
+                            ))),
+                    PopupMenuItem(
+                        value: 1,
+                        child: SizedBox(
+                            width: 312,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(Icons.logout_outlined,
+                                    color: Theme.of(context).indicatorColor),
+                                const SizedBox(width: 12.0),
+                                const Expanded(
+                                  child: Text("Sign Out",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500)),
+                                ),
+                              ],
                             )))
                   ];
                 }),
@@ -80,7 +106,8 @@ class HomeScreen extends StatelessWidget {
               child: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,
                 showUnselectedLabels: false,
-                backgroundColor: Theme.of(context).primaryColor.withOpacity(0.4),
+                backgroundColor:
+                    Theme.of(context).primaryColor.withOpacity(0.4),
                 showSelectedLabels: false,
                 selectedLabelStyle: const TextStyle(fontSize: 8.0),
                 currentIndex: provider.selectedIndex,
