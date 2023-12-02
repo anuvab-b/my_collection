@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +37,9 @@ class SignupProvider extends ChangeNotifier {
       await user!.updateDisplayName(userNameController.text);
       await user.reload();
       user = firebaseAuth.currentUser;
+      if (user != null) {
+        addUserToCollection(user);
+      }
       emailController.clear();
       passwordController.clear();
     } on FirebaseAuthException catch (e) {
@@ -52,17 +56,24 @@ class SignupProvider extends ChangeNotifier {
     return user;
   }
 
+  Future<void> addUserToCollection(User? user) async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user?.displayName)
+        .set({"username": user?.displayName, "email-id": user?.email});
+  }
+
   bool isSignUpFormValidated() {
     return !(userNameController.text.isEmpty ||
         emailController.text.isEmpty ||
         passwordController.text.isEmpty);
   }
 
-  onSignUpTextFieldChange(String text){
+  onSignUpTextFieldChange(String text) {
     notifyListeners();
   }
 
-  unFocusNodes(){
+  unFocusNodes() {
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
     userNameFocusNode.unfocus();
