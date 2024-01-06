@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart';
@@ -14,7 +15,10 @@ enum MusicSearchCategories {
 }
 
 class MusicProvider extends ChangeNotifier {
+  late FirebaseFirestore db;
+  String searchQuery = "";
   MusicProvider() {
+    db = FirebaseFirestore.instance;
     textEditingController = TextEditingController();
   }
 
@@ -30,19 +34,22 @@ class MusicProvider extends ChangeNotifier {
 
   Future<Either<String, SpotifySearchResponseModel>?> getMusicBySearch(
       String query, String filterType) async {
+    Either<String, SpotifySearchResponseModel>? result;
     if (musicSearchMap.containsKey(query)) {
-      return musicSearchMap[query];
+      result = musicSearchMap[query];
     } else {
-      var result = await musicRepository.getSpotifySearchResults(
-          accessToken, query, "album,track,artist,playlist");
-      if (query.isNotEmpty) {
-        musicSearchMap.putIfAbsent(query, () => result);
+      if(query.isNotEmpty) {
+        result = await musicRepository.getSpotifySearchResults(
+            accessToken, query, "album,track,artist,playlist");
+        if (query.isNotEmpty) {
+          musicSearchMap.putIfAbsent(query, () => result);
+        }
+        result.fold((l) {}, (r) {
+          spotifySearchResponseModel = r;
+        });
       }
-      result.fold((l) {}, (r) {
-        spotifySearchResponseModel = r;
-      });
-      return result;
     }
+    return result;
   }
 
   void onFilterCategoryChanged(MusicSearchCategories newCategory) {
