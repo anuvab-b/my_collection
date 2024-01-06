@@ -116,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(16), // <-- Radius
+                                BorderRadius.circular(16),
                           ),
                           backgroundColor: Theme.of(context).primaryColor,
                           foregroundColor: Theme.of(context).primaryColorLight),
@@ -195,11 +195,46 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     height: 50,
                     child: TextButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        provider.unFocusNodes();
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            barrierColor: Colors.transparent,
+                            builder: (ctx) {
+                              return const CommonLoader();
+                            });
+                        User? user = await provider.signInWithGoogle();
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                        if (user != null) {
+                          if (context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                RouteNames.home,
+                                    (Route<dynamic> route) => false);
+                          }
+                        } else {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(
+                              content: Text(
+                                provider?.loginErrMessage ?? "",
+                                style: TextStyle(
+                                    color:
+                                    Theme.of(context).primaryColor),
+                              ),
+                              backgroundColor:
+                              Theme.of(context).primaryColorLight,
+                            ));
+                          }
+                        }
+                      },
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(16), // <-- Radius
+                                BorderRadius.circular(16),
                           ),
                           backgroundColor: Theme.of(context).primaryColorLight,
                           foregroundColor: Theme.of(context).primaryColor),
@@ -228,7 +263,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(16), // <-- Radius
+                                BorderRadius.circular(16),
                           ),
                           backgroundColor: Theme.of(context).primaryColorLight,
                           foregroundColor: Theme.of(context).primaryColor),
@@ -257,7 +292,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(16), // <-- Radius
+                                BorderRadius.circular(16),
                           ),
                           backgroundColor: Theme.of(context).primaryColorLight,
                           foregroundColor: Theme.of(context).primaryColor),
