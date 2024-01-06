@@ -96,6 +96,7 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                                     progressIndicatorBuilder:
                                         (context, url, progress) => Center(
                                       child: CircularProgressIndicator(
+                                        color: Theme.of(context).primaryColorLight,
                                         value: progress.progress,
                                       ),
                                     ),

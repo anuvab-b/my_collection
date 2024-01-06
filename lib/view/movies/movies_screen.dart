@@ -20,14 +20,6 @@ class MoviesScreen extends StatelessWidget {
             child: Column(
               children: [
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text(
-                    "Hi @Username,",
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 32.0,
-                        fontWeight: FontWeight.w900,
-                        fontFamily: "Poppins"),
-                  ),
                   const SizedBox(height: 16.0),
                   provider.isNowPlayingLoading
                       ? Shimmer.fromColors(
@@ -93,6 +85,7 @@ class MoviesScreen extends StatelessWidget {
                                                                     CircularProgressIndicator(
                                                                   value: progress
                                                                       .progress,
+                                                                      color: Theme.of(context).primaryColorLight,
                                                                 ),
                                                               ),
                                                               imageUrl:
