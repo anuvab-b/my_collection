@@ -92,7 +92,7 @@ class AlbumElement {
   String? id;
   List<Image> images;
   String? name;
-  DateTime? releaseDate;
+  String? releaseDate;
   String? releaseDatePrecision;
   int? totalTracks;
   String? type;
@@ -131,9 +131,7 @@ class AlbumElement {
             ? []
             : List<Image>.from(json["images"]!.map((x) => Image.fromJson(x))),
         name: json["name"],
-        releaseDate: json["release_date"] == null
-            ? null
-            : DateTime.parse(json["release_date"]),
+        releaseDate: json["release_date"] ?? "",
         releaseDatePrecision: json["release_date_precision"],
         totalTracks: json["total_tracks"],
         type: json["type"],
@@ -155,8 +153,7 @@ class AlbumElement {
             ? []
             : List<dynamic>.from(images!.map((x) => x.toJson())),
         "name": name,
-        "release_date":
-            "${releaseDate!.year.toString().padLeft(4, '0')}-${releaseDate!.month.toString().padLeft(2, '0')}-${releaseDate!.day.toString().padLeft(2, '0')}",
+        "release_date": releaseDate,
         "release_date_precision": releaseDatePrecision,
         "total_tracks": totalTracks,
         "type": type,
