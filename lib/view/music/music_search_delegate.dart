@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart'
     as spotify;
 import 'package:my_collection/utils/data_utils.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -151,7 +152,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                           .highlightColor)),
                                               const SizedBox(height: 4.0),
                                               Row(children: [
-                                                Text(trackItem?.type ?? "",
+                                                Text(DataUtils.formatTrackType(trackItem?.type ?? ""),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.clip,
                                                     style: TextStyle(
@@ -256,7 +257,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                           .highlightColor)),
                                               const SizedBox(height: 4.0),
                                               Row(children: [
-                                                Text(albumElement?.type ?? "",
+                                                Text(DataUtils.formatTrackType(albumElement?.type ?? ""),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.clip,
                                                     style: TextStyle(
@@ -307,95 +308,105 @@ class MusicSearchDelegate extends SearchDelegate {
                                   spotify.ArtistsItem? artistItem =
                                       searchResponseModel
                                           ?.artists?.items[index];
-                                  return Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                            height: 48,
-                                            width: 48,
-                                            child: (artistItem != null &&
-                                                    artistItem
-                                                        .images.isNotEmpty)
-                                                ? ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2),
-                                                    child: CachedNetworkImage(
-                                                      fit: BoxFit.fill,
-                                                      progressIndicatorBuilder:
-                                                          (context, url,
-                                                                  progress) =>
-                                                              Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          value:
-                                                              progress.progress,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColorLight,
+                                  return InkWell(
+                                    onTap: (){
+                                      Navigator.pushNamed(
+                                          context, RouteNames.artistScreen, arguments: {"artistId":artistItem?.id ?? ""});
+                                      Provider.of<MusicProvider>(context, listen: false).getArtistDetails(artistItem?.id ?? "");
+                                      Provider.of<MusicProvider>(context, listen: false).getArtistAlbums(artistItem?.id ?? "");
+                                      Provider.of<MusicProvider>(context, listen: false).getSpotifyArtistTopTracks(artistItem?.id ?? "");
+                                      Provider.of<MusicProvider>(context, listen: false).getSpotifyArtistRelatedArtists(artistItem?.id ?? "");
+                                    },
+                                    child: Container(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                              height: 48,
+                                              width: 48,
+                                              child: (artistItem != null &&
+                                                      artistItem
+                                                          .images.isNotEmpty)
+                                                  ? ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              24),
+                                                      child: CachedNetworkImage(
+                                                        fit: BoxFit.fill,
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    progress) =>
+                                                                Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            value:
+                                                                progress.progress,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorLight,
+                                                          ),
                                                         ),
+                                                        imageUrl:
+                                                            "${artistItem.images.first.url}",
                                                       ),
-                                                      imageUrl:
-                                                          "${artistItem.images.first.url}",
-                                                    ),
-                                                  )
-                                                : Image.network(
-                                                    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                                    fit: BoxFit.fill)),
-                                        const SizedBox(width: 8.0),
-                                        Flexible(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(artistItem?.name ?? "",
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.clip,
-                                                  style: TextStyle(
-                                                      fontFamily: "Poppins",
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Theme.of(context)
-                                                          .highlightColor)),
-                                              const SizedBox(height: 4.0),
-                                              Row(children: [
-                                                Text(artistItem?.type ?? "",
+                                                    )
+                                                  : Image.network(
+                                                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
+                                                      fit: BoxFit.fill)),
+                                          const SizedBox(width: 8.0),
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(artistItem?.name ?? "",
                                                     maxLines: 1,
                                                     overflow: TextOverflow.clip,
                                                     style: TextStyle(
                                                         fontFamily: "Poppins",
-                                                        fontSize: 12,
+                                                        fontSize: 16,
                                                         fontWeight:
-                                                            FontWeight.w500,
+                                                            FontWeight.w600,
                                                         color: Theme.of(context)
-                                                            .primaryColorLight)),
-                                                const SizedBox(width: 4.0),
-                                                const Icon(Icons.circle,
-                                                    size: 4.0),
-                                                const SizedBox(width: 4.0),
-                                                Flexible(
-                                                  child: Text(
-                                                      artistItem?.name ?? "",
+                                                            .highlightColor)),
+                                                const SizedBox(height: 4.0),
+                                                Row(children: [
+                                                  Text(DataUtils.formatTrackType(artistItem?.type ?? ""),
                                                       maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.clip,
+                                                      overflow: TextOverflow.clip,
                                                       style: TextStyle(
                                                           fontFamily: "Poppins",
                                                           fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          color: Theme.of(
-                                                                  context)
+                                                          color: Theme.of(context)
                                                               .primaryColorLight)),
-                                                ),
-                                              ])
-                                            ],
+                                                  const SizedBox(width: 4.0),
+                                                  const Icon(Icons.circle,
+                                                      size: 4.0),
+                                                  const SizedBox(width: 4.0),
+                                                  Flexible(
+                                                    child: Text(
+                                                        artistItem?.name ?? "",
+                                                        maxLines: 1,
+                                                        overflow:
+                                                            TextOverflow.clip,
+                                                        style: TextStyle(
+                                                            fontFamily: "Poppins",
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorLight)),
+                                                  ),
+                                                ])
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 }),
@@ -463,7 +474,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                           .highlightColor)),
                                               const SizedBox(height: 4.0),
                                               Row(children: [
-                                                Text(playListItem?.type ?? "",
+                                                Text(DataUtils.formatTrackType(playListItem?.type ?? ""),
                                                     maxLines: 1,
                                                     overflow: TextOverflow.clip,
                                                     style: TextStyle(
