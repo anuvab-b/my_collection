@@ -2,7 +2,7 @@
     package="com.anuvabbiswas.my_collection">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="my_collection"
+        android:label="My Collection"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
        <activity

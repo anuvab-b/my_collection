@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:my_collection/utils/secure_storage.dart';
 
 class LoginProvider extends ChangeNotifier{
@@ -63,5 +64,34 @@ class LoginProvider extends ChangeNotifier{
     emailFocusNode.unfocus();
     passwordFocusNode.unfocus();
     notifyListeners();
+  }
+
+  Future<dynamic> signInWithGoogle()async{
+    User? user;
+    try{
+      final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
+      final GoogleSignInAuthentication? googleAuth = await googleSignInAccount?.authentication;
+
+      final credential = GoogleAuthProvider.credential(accessToken: googleAuth?.accessToken,idToken: googleAuth?.idToken);
+
+      UserCredential signInUser = await FirebaseAuth.instance.signInWithCredential(credential);
+      user = signInUser.user;
+      SecureStorageManager().setSecureStorageData("user_id",user?.email);
+    }
+    on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        loginErrMessage = "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        loginErrMessage = "Wrong password provided for that user.";
+      } else if(e.code == "INVALID_LOGIN_CREDENTIALS"){
+        loginErrMessage = "Invalid login credentials";
+      }
+      else {
+        loginErrMessage = e.message.toString();
+      }
+    } catch (e) {
+      loginErrMessage = e.toString();
+    }
+    return user;
   }
 }
