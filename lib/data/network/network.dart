@@ -47,7 +47,6 @@ class ApiHelper extends ChangeNotifier{
         default:
       }
       debugPrint("<-- Network : After response-->");
-    final responseMessage = response.data;
     final responseData = response.data;
     return ApiResponse(
       statusCode: response.statusCode, success: true, message: "", data: responseData);
