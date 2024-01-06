@@ -60,4 +60,19 @@ class DataUtils {
       return "-";
     }
   }
+
+  static String formatTrackType(String type){
+    switch(type){
+      case "track":
+        return "Song";
+      case "album":
+        return "Album";
+      case "artist":
+        return "Artist";
+      case "playlist":
+        return "Playlist";
+      default:
+        return "";
+    }
+  }
 }
