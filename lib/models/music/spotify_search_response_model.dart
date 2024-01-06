@@ -72,9 +72,9 @@ class Albums {
 
   Map<String, dynamic> toJson() => {
         "href": href,
-        "items": items == null
+        "items": items.isEmpty
             ? []
-            : List<dynamic>.from(items!.map((x) => x.toJson())),
+            : List<dynamic>.from(items.map((x) => x.toJson())),
         "limit": limit,
         "next": next,
         "offset": offset,
@@ -140,18 +140,18 @@ class AlbumElement {
 
   Map<String, dynamic> toJson() => {
         "album_type": albumType,
-        "artists": artists == null
+        "artists": artists.isEmpty
             ? []
-            : List<dynamic>.from(artists!.map((x) => x.toJson())),
+            : List<dynamic>.from(artists.map((x) => x.toJson())),
         "available_markets": availableMarkets == null
             ? []
             : List<dynamic>.from(availableMarkets!.map((x) => x)),
         "external_urls": externalUrls?.toJson(),
         "href": href,
         "id": id,
-        "images": images == null
+        "images": images.isEmpty
             ? []
-            : List<dynamic>.from(images!.map((x) => x.toJson())),
+            : List<dynamic>.from(images.map((x) => x.toJson())),
         "name": name,
         "release_date": releaseDate,
         "release_date_precision": releaseDatePrecision,
@@ -277,9 +277,9 @@ class Artists {
 
   Map<String, dynamic> toJson() => {
         "href": href,
-        "items": items == null
+        "items": items.isEmpty
             ? []
-            : List<dynamic>.from(items!.map((x) => x.toJson())),
+            : List<dynamic>.from(items.map((x) => x.toJson())),
         "limit": limit,
         "next": next,
         "offset": offset,
@@ -341,9 +341,9 @@ class ArtistsItem {
             genres == null ? [] : List<dynamic>.from(genres!.map((x) => x)),
         "href": href,
         "id": id,
-        "images": images == null
+        "images": images.isEmpty
             ? []
-            : List<dynamic>.from(images!.map((x) => x.toJson())),
+            : List<dynamic>.from(images.map((x) => x.toJson())),
         "name": name,
         "popularity": popularity,
         "type": type,
@@ -405,9 +405,9 @@ class Playlists {
 
   Map<String, dynamic> toJson() => {
         "href": href,
-        "items": items == null
+        "items": items.isEmpty
             ? []
-            : List<dynamic>.from(items!.map((x) => x.toJson())),
+            : List<dynamic>.from(items.map((x) => x.toJson())),
         "limit": limit,
         "next": next,
         "offset": offset,
@@ -477,9 +477,9 @@ class PlaylistsItem {
         "external_urls": externalUrls?.toJson(),
         "href": href,
         "id": id,
-        "images": images == null
+        "images": images.isEmpty
             ? []
-            : List<dynamic>.from(images!.map((x) => x.toJson())),
+            : List<dynamic>.from(images.map((x) => x.toJson())),
         "name": name,
         "owner": owner?.toJson(),
         "primary_color": primaryColor,
@@ -525,9 +525,9 @@ class Tracks {
 
   Map<String, dynamic> toJson() => {
         "href": href,
-        "items": items == null
+        "items": items.isEmpty
             ? []
-            : List<dynamic>.from(items!.map((x) => x.toJson())),
+            : List<dynamic>.from(items.map((x) => x.toJson())),
         "limit": limit,
         "next": next,
         "offset": offset,
@@ -606,9 +606,9 @@ class TracksItem {
 
   Map<String, dynamic> toJson() => {
         "album": album?.toJson(),
-        "artists": artists == null
+        "artists": artists.isEmpty
             ? []
-            : List<dynamic>.from(artists!.map((x) => x.toJson())),
+            : List<dynamic>.from(artists.map((x) => x.toJson())),
         "available_markets": availableMarkets == null
             ? []
             : List<dynamic>.from(availableMarkets!.map((x) => x)),

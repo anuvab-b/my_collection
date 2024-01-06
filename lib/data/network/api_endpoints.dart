@@ -12,4 +12,6 @@ class ApiEndpoints{
   static const spotifyGenerateToken = "https://accounts.spotify.com/api/token";
   static const spotifyClientId = "7ce347773aea4c15a532fafecbf785dc";
   static const spotifyClientSecret = "9b4b161957a54270a1695051a2c56851";
+
+  static const spotifyArtistDetails = "${spotifyBaseUrl}artists/";
 }
