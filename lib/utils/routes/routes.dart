@@ -3,7 +3,6 @@ import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/error_screen.dart';
 import 'package:my_collection/view/home_screen.dart';
 import 'package:my_collection/view/login/login_screen.dart';
-import 'package:my_collection/view/music/music_search_screen.dart';
 import 'package:my_collection/view/signup/signup_screen.dart';
 import 'package:my_collection/view/splash_screen.dart';
 
@@ -18,8 +17,6 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const SplashScreen());
       case RouteNames.home:
         return MaterialPageRoute(builder: (context) => const HomeScreen());
-      case RouteNames.musicSearch:
-        return SlideRightRoute(widget: const MusicSearchScreen());
 
       default:
         return MaterialPageRoute(builder: (context) => const ErrorScreen());
