@@ -1,8 +1,11 @@
 import 'dart:async';
-
 import 'package:dartz/dartz.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/data/network/network.dart';
+import 'package:my_collection/models/music/artists/spotify_artist_albums.dart';
+import 'package:my_collection/models/music/artists/spotify_artist_details.dart';
+import 'package:my_collection/models/music/artists/spotify_artist_related_artists.dart';
+import 'package:my_collection/models/music/artists/spotify_artist_top_tracks.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart';
 
 class MusicRepository {
@@ -23,7 +26,7 @@ class MusicRepository {
         String token = res.data["access_token"];
         return right(token);
       } else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     } catch (e) {
       return left(e.toString());
@@ -48,7 +51,87 @@ class MusicRepository {
             SpotifySearchResponseModel.fromJson(res.data);
         return right(spotifySearchResponseModel);
       } else {
-        return left(res.message ?? "");
+        return left(res.message);
+      }
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  Future<Either<String, SpotifyArtistDetails>> getSpotifyArtistDetails(
+      String artistId, String accessToken) async {
+    SpotifyArtistDetails spotifyArtistDetails;
+    String url = "${ApiEndpoints.spotifyArtistDetails}$artistId";
+    try {
+      var res =
+          await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
+        "Authorization": "Bearer $accessToken",
+      });
+      if (res.statusCode == 200) {
+        spotifyArtistDetails = SpotifyArtistDetails.fromJson(res.data);
+        return right(spotifyArtistDetails);
+      } else {
+        return left(res.message);
+      }
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  Future<Either<String, SpotifyArtistAlbums>> getSpotifyArtistAlbums(
+      String artistId, String accessToken) async {
+    SpotifyArtistAlbums spotifyArtistAlbums;
+    String url = "${ApiEndpoints.spotifyArtistDetails}$artistId/albums";
+    try {
+      var res =
+          await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
+        "Authorization": "Bearer $accessToken",
+      });
+      if (res.statusCode == 200) {
+        spotifyArtistAlbums = SpotifyArtistAlbums.fromJson(res.data);
+        return right(spotifyArtistAlbums);
+      } else {
+        return left(res.message);
+      }
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  Future<Either<String, SpotifyArtistTopTracks>> getSpotifyArtistTopTracks(
+      String artistId, String accessToken) async {
+    SpotifyArtistTopTracks spotifyArtistTopTracks;
+    String url = "${ApiEndpoints.spotifyArtistDetails}$artistId/top-tracks?market=IN";
+    try {
+      var res =
+          await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
+        "Authorization": "Bearer $accessToken",
+      });
+      if (res.statusCode == 200) {
+        spotifyArtistTopTracks = SpotifyArtistTopTracks.fromJson(res.data);
+        return right(spotifyArtistTopTracks);
+      } else {
+        return left(res.message);
+      }
+    } catch (e) {
+      return left(e.toString());
+    }
+  }
+
+  Future<Either<String, SpotifyArtistRelatedArtists>> getSpotifyArtistRelatedArtists(
+      String artistId, String accessToken) async {
+    SpotifyArtistRelatedArtists spotifyArtistRelatedArtists;
+    String url = "${ApiEndpoints.spotifyArtistDetails}$artistId/related-artists";
+    try {
+      var res =
+      await ApiHelper().request(url: url, method: HTTPMETHOD.GET, headers: {
+        "Authorization": "Bearer $accessToken",
+      });
+      if (res.statusCode == 200) {
+        spotifyArtistRelatedArtists = SpotifyArtistRelatedArtists.fromJson(res.data);
+        return right(spotifyArtistRelatedArtists);
+      } else {
+        return left(res.message);
       }
     } catch (e) {
       return left(e.toString());
