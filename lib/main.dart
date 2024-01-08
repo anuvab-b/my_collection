@@ -11,6 +11,7 @@ import 'package:my_collection/viewmodel/home_screen_provider.dart';
 import 'package:my_collection/viewmodel/login/login_provider.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
+import 'package:my_collection/viewmodel/playlist_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:my_collection/viewmodel/signup/signup_provider.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => ApiHelper()),
           ChangeNotifierProvider(create: (_) => themeChangeProvider),
           ChangeNotifierProvider(create: (_) => MusicProvider()),
+          ChangeNotifierProvider(create: (_) => PlayListProvider()),
           ChangeNotifierProvider(create: (_) => MovieProvider()),
           ChangeNotifierProvider(create: (_) => BooksProvider()),
           ChangeNotifierProvider(create: (_) => SeriesProvider()),
