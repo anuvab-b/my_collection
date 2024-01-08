@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
+import 'package:my_collection/viewmodel/playlist_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -36,7 +37,9 @@ class HomeScreenProvider extends ChangeNotifier{
 
     else if(index == 3){
       MusicProvider musicProvider = Provider.of<MusicProvider>(context,listen: false);
+      PlayListProvider playListProvider = Provider.of<PlayListProvider>(context,listen: false);
       musicProvider.getToken();
+      playListProvider.fetchMusicPlayLists();
     }
     selectedIndex = index;
     notifyListeners();
