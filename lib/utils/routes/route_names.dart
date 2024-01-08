@@ -8,5 +8,8 @@ class RouteNames{
   static const String songScreen = "song";
   static const String artistScreen = "artist";
   static const String albumScreen = "album";
-  static const String playlistScreen = "playlist";
+  static const String spotifyPlaylistScreen = "playlist";
+
+  static const String createPlayListForm = "self-playlist-form";
+  static const String playListDetails = "playlist-details";
 }
