@@ -143,21 +143,12 @@ class AlbumElement {
         "artists": artists.isEmpty
             ? []
             : List<dynamic>.from(artists.map((x) => x.toJson())),
-        "available_markets": availableMarkets == null
-            ? []
-            : List<dynamic>.from(availableMarkets!.map((x) => x)),
-        "external_urls": externalUrls?.toJson(),
-        "href": href,
-        "id": id,
         "images": images.isEmpty
             ? []
             : List<dynamic>.from(images.map((x) => x.toJson())),
         "name": name,
         "release_date": releaseDate,
-        "release_date_precision": releaseDatePrecision,
-        "total_tracks": totalTracks,
-        "type": type,
-        "uri": uri,
+        "total_tracks": totalTracks
       };
 }
 
@@ -193,12 +184,7 @@ class Owner {
       );
 
   Map<String, dynamic> toJson() => {
-        "external_urls": externalUrls?.toJson(),
-        "href": href,
-        "id": id,
         "name": name,
-        "type": type,
-        "uri": uri,
         "display_name": displayName,
       };
 }
