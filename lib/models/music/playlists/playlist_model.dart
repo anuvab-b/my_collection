@@ -1,4 +1,3 @@
-import 'package:my_collection/models/music/artists/spotify_artist_related_artists.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart';
 
 class PlayListModel {
