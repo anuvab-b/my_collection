@@ -2,11 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_collection/models/music/playlists/playlist_model.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart'
     as spotify;
 import 'package:my_collection/utils/data_utils.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
+import 'package:my_collection/view/music/playlists/playlist_list_view.dart';
 import 'package:my_collection/view/widgets/common_loader.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
@@ -208,84 +208,57 @@ class MusicSearchDelegate extends SearchDelegate {
                                                     builder: (context, provider,
                                                         child) {
                                                   return Container(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 16.0,
-                                                        vertical: 16.0),
-                                                    color: Theme.of(context)
-                                                        .primaryColor,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        const Text(
-                                                            "Add to a Playlist",
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    "Poppins",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                                fontSize: 24)),
-                                                        ListView.builder(
-                                                            shrinkWrap: true,
-                                                            itemBuilder:
-                                                                (ctx, index) {
-                                                              PlayListModel
-                                                                  playListModel =
-                                                                  provider.playLists[
-                                                                      index];
-                                                              return InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      barrierColor:
-                                                                          Colors
-                                                                              .transparent,
-                                                                      builder:
-                                                                          (ctx) {
-                                                                        return const CommonLoader();
-                                                                      });
-                                                                  await provider
-                                                                      .addNewSongToPlayList(
-                                                                          trackItem!,
-                                                                          index);
-                                                                  if (context
-                                                                      .mounted) {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  }
-                                                                },
-                                                                child: SizedBox(
-                                                                    child: Text(
-                                                                  playListModel
-                                                                      .name,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          "Poppins",
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400,
-                                                                      fontSize:
-                                                                          14),
-                                                                )),
-                                                              );
-                                                            },
-                                                            itemCount: provider
-                                                                .playLists
-                                                                .length),
-                                                      ],
-                                                    ),
-                                                  );
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16.0,
+                                                          vertical: 16.0),
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          const Text(
+                                                              "Add to a Playlist",
+                                                              style: TextStyle(
+                                                                  fontFamily:
+                                                                      "Poppins",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  fontSize:
+                                                                      24)),
+                                                          Expanded(child:
+                                                              PlayListListView(
+                                                                  onTap:
+                                                                      (_) async {
+                                                            showDialog(
+                                                                context:
+                                                                    context,
+                                                                barrierDismissible:
+                                                                    false,
+                                                                barrierColor: Colors
+                                                                    .transparent,
+                                                                builder: (ctx) {
+                                                                  return const CommonLoader();
+                                                                });
+                                                            await provider
+                                                                .addNewSongToPlayList(
+                                                                    trackItem!,
+                                                                    index);
+                                                            if (context
+                                                                .mounted) {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            }
+                                                          })),
+                                                        ],
+                                                      ));
                                                 });
                                               });
                                         })
