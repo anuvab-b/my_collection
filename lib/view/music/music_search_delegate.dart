@@ -246,7 +246,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                             await provider
                                                                 .addNewSongToPlayList(
                                                                     trackItem!,
-                                                                    index);
+                                                                    _);
                                                             if (context
                                                                 .mounted) {
                                                               Navigator.of(

@@ -49,7 +49,10 @@ class MusicScreen extends StatelessWidget {
                   Navigator.pushNamed(context, RouteNames.createPlayListForm);
                 },
                 icon: const Icon(Icons.add)),
-            Expanded(child: PlayListListView(onTap: (_) {}))
+            Expanded(child: PlayListListView(onTap: (_) {
+              provider.setSelectedPlayListIndex(_);
+              Navigator.pushNamed(context, RouteNames.playListDetails);
+            }))
           ]));
     });
   }

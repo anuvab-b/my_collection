@@ -14,6 +14,7 @@ class PlayListProvider extends ChangeNotifier {
   late Uuid uuid;
   PlayListModel? selectedPlayListModel;
   List<PlayListModel> playLists = List.empty(growable: true);
+  int selectedPlayListIndex = -1;
 
   bool isLoadingPlayLists = false;
 
@@ -79,6 +80,11 @@ class PlayListProvider extends ChangeNotifier {
     isLoadingPlayLists = false;
     playLists =
         snapshot.docs.map((e) => PlayListModel.fromJson(e.data())).toList();
+    notifyListeners();
+  }
+
+  setSelectedPlayListIndex(int index){
+    selectedPlayListIndex = index;
     notifyListeners();
   }
 }
