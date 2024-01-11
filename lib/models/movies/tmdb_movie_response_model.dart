@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final tmdbMovieResponseModel = tmdbMovieResponseModelFromJson(jsonString);
-
 import 'dart:convert';
 
 TmdbMovieResponseModel tmdbMovieResponseModelFromJson(String str) => TmdbMovieResponseModel.fromJson(json.decode(str));
@@ -11,16 +7,20 @@ String tmdbMovieResponseModelToJson(TmdbMovieResponseModel data) => json.encode(
 class TmdbMovieResponseModel {
   Dates? dates;
   int? page;
-  List<MovieListModel>? results;
+  List<MovieListModel> results;
   int? totalPages;
   int? totalResults;
+  String? name;
+  String? uuid;
 
   TmdbMovieResponseModel({
     this.dates,
     this.page,
-    this.results,
+    required this.results,
     this.totalPages,
     this.totalResults,
+    this.name,
+    this.uuid
   });
 
   factory TmdbMovieResponseModel.fromJson(Map<String, dynamic> json) => TmdbMovieResponseModel(
@@ -32,12 +32,19 @@ class TmdbMovieResponseModel {
   );
 
   Map<String, dynamic> toJson() => {
-    "dates": dates?.toJson(),
-    "page": page,
+    "name": name,
+    "uuid": uuid,
     "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toJson())),
-    "total_pages": totalPages,
-    "total_results": totalResults,
   };
+
+  TmdbMovieResponseModel copyWith(
+      {String? name, String? uuid, List<MovieListModel>? results}) {
+    return TmdbMovieResponseModel(
+      name: name ?? this.name,
+      results: results ?? this.results,
+      uuid: uuid ?? this.uuid
+    );
+  }
 }
 
 class Dates {

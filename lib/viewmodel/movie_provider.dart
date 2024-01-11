@@ -30,7 +30,7 @@ class MovieProvider extends ChangeNotifier{
     var result = await movieRepository.fetchUpcomingMovies();
     isUpcomingLoading = false;
     result.fold((l){}, (r){
-      upcomingMovieList = r.results!;
+      upcomingMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
 
@@ -42,7 +42,7 @@ class MovieProvider extends ChangeNotifier{
     var result = await movieRepository.fetchPopularMovies();
     isPopularLoading = false;
     result.fold((l){}, (r){
-      popularMovieList = r.results!;
+      popularMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
 
@@ -54,7 +54,7 @@ class MovieProvider extends ChangeNotifier{
     var result = await movieRepository.fetchNowPlayingMovies();
     isNowPlayingLoading = false;
     result.fold((l){}, (r){
-      nowPlayingMovieList = r.results!;
+      nowPlayingMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
 
@@ -66,7 +66,7 @@ class MovieProvider extends ChangeNotifier{
     var result = await movieRepository.fetchTopRatedMovies();
     isTopRatedLoading = false;
     result.fold((l){}, (r){
-      topRatedMovieList = r.results!;
+      topRatedMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
   }
