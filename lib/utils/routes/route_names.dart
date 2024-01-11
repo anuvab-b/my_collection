@@ -12,4 +12,11 @@ class RouteNames{
 
   static const String createPlayListForm = "self-playlist-form";
   static const String playListDetails = "playlist-details";
+
+  static const String createSeriesWatchListForm = "series-watchlist-form";
+  static const String seriesWatchListDetails = "series-watchlist-details";
+
+  static const String createMovieWatchListForm = "movie-watchlist-form";
+  static const String movieWatchListDetails = "movie-watchlist-details";
+
 }

@@ -19,32 +19,32 @@ class SeriesProvider extends ChangeNotifier{
   bool isPopularLoading = false;
   bool isNowPlayingLoading = false;
   bool isTopRatedLoading = false;
+  bool isOnTheAirLoading = false;
+  bool isAiringTodayLoading = false;
 
   int pageIndex = 0;
   int selectedPageIndex = 0;
 
   Future<void> getAiringToday() async {
-    isUpcomingLoading = true;
+    isAiringTodayLoading = true;
     notifyListeners();
     var result = await seriesRepository.fetchAiringToday();
-    isUpcomingLoading = false;
+    isAiringTodayLoading = false;
     result.fold((l){}, (r){
-      airingTodaySeriesList = r.results!;
+      airingTodaySeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
-
   }
 
   Future<void> getOnTheAir() async {
-    isPopularLoading = true;
+    isOnTheAirLoading = true;
     notifyListeners();
     var result = await seriesRepository.fetchOnTheAir();
-    isPopularLoading = false;
+    isOnTheAirLoading = false;
     result.fold((l){}, (r){
-      onTheAirSeriesList = r.results!;
+      onTheAirSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
-
   }
 
   Future<void> getPopular() async {
@@ -53,10 +53,9 @@ class SeriesProvider extends ChangeNotifier{
     var result = await seriesRepository.fetchPopular();
     isNowPlayingLoading = false;
     result.fold((l){}, (r){
-      popularSeriesList = r.results!;
+      popularSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
-
   }
 
   Future<void> getTopRated() async {
@@ -65,7 +64,7 @@ class SeriesProvider extends ChangeNotifier{
     var result = await seriesRepository.fetchTopRatedSeries();
     isTopRatedLoading = false;
     result.fold((l){}, (r){
-      topRatedSeriesList = r.results!;
+      topRatedSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
     });
     notifyListeners();
   }
@@ -83,5 +82,4 @@ class SeriesProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-
 }
