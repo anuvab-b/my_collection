@@ -19,7 +19,7 @@ class MovieRepository{
         return right(nowPlayingModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -40,7 +40,7 @@ class MovieRepository{
         return right(upcomingModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -50,7 +50,7 @@ class MovieRepository{
 
   Future<Either<String,TmdbMovieResponseModel>> fetchUpcomingMovies()async{
     TmdbMovieResponseModel upcomingModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/top_rated";
+    String url = "${ApiEndpoints.tmdbBaseUrl}movie/upcoming";
     String token = ApiEndpoints.tmdbToken;
     try {
       var res = await ApiHelper().request(url: url, headers: {
@@ -61,7 +61,7 @@ class MovieRepository{
         return right(upcomingModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){
@@ -71,7 +71,7 @@ class MovieRepository{
 
   Future<Either<String,TmdbMovieResponseModel>> fetchTopRatedMovies()async{
     TmdbMovieResponseModel topRatedModel;
-    String url = "${ApiEndpoints.tmdbBaseUrl}movie/upcoming";
+    String url = "${ApiEndpoints.tmdbBaseUrl}movie/top_rated";
     String token = ApiEndpoints.tmdbToken;
     try {
       var res = await ApiHelper().request(url: url, headers: {
@@ -82,7 +82,7 @@ class MovieRepository{
         return right(topRatedModel);
       }
       else {
-        return left(res.message ?? "");
+        return left(res.message);
       }
     }
     catch(e){

@@ -6,15 +6,19 @@ String tmdbTvResponseModelToJson(TmdbTvResponseModel data) => json.encode(data.t
 
 class TmdbTvResponseModel {
   int? page;
-  List<SeriesListModel>? results;
+  List<SeriesListModel> results;
   int? totalPages;
   int? totalResults;
+  String? name;
+  String? uuid;
 
   TmdbTvResponseModel({
     this.page,
-    this.results,
+    required this.results,
     this.totalPages,
     this.totalResults,
+    this.name,
+    this.uuid
   });
 
   factory TmdbTvResponseModel.fromJson(Map<String, dynamic> json) => TmdbTvResponseModel(
@@ -22,14 +26,24 @@ class TmdbTvResponseModel {
     results: json["results"] == null ? [] : List<SeriesListModel>.from(json["results"]!.map((x) => SeriesListModel.fromJson(x))),
     totalPages: json["total_pages"],
     totalResults: json["total_results"],
+    name: json["name"] ?? "",
+      uuid: json["uuid"] ?? ""
   );
 
   Map<String, dynamic> toJson() => {
-    "page": page,
-    "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toJson())),
-    "total_pages": totalPages,
-    "total_results": totalResults,
+    "results": List<dynamic>.from(results.map((x) => x.toJson())),
+    "name": name,
+    "uuid": uuid
   };
+
+  TmdbTvResponseModel copyWith(
+      {String? name, String? uuid, List<SeriesListModel>? results}) {
+    return TmdbTvResponseModel(
+        name: name ?? this.name,
+        results: results ?? this.results,
+        uuid: uuid ?? this.uuid
+    );
+  }
 }
 
 class SeriesListModel {
