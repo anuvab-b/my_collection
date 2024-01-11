@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -32,6 +33,37 @@ class MoviesScreen extends StatelessWidget {
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(
+                                  "Your Watchlist collection",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColorLight,
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily: "Poppins"),
+                                ),
+                                const SizedBox(height: 16.0),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      Navigator.pushNamed(context, RouteNames.createMovieWatchListForm);
+                                    },
+                                    style: TextButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(12)),
+                                        backgroundColor: Theme.of(context).primaryColor,
+                                        foregroundColor: Theme.of(context).primaryColorDark),
+                                    child: Text(
+                                      "Create a Watchlist",
+                                      style: TextStyle(
+                                          color: Theme.of(context).primaryColorLight,
+                                          fontSize: 18,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16.0),
                                 Text(
                                   "Currently Watching",
                                   style: TextStyle(
