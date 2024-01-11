@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,37 @@ class SeriesScreen extends StatelessWidget {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text(
+                              "Your Watchlist collection",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColorLight,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w900,
+                                  fontFamily: "Poppins"),
+                            ),
+                            const SizedBox(height: 16.0),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: TextButton(
+                                onPressed: () async {
+                                  Navigator.pushNamed(context, RouteNames.createSeriesWatchListForm);
+                                },
+                                style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12)),
+                                    backgroundColor: Theme.of(context).primaryColor,
+                                    foregroundColor: Theme.of(context).primaryColorDark),
+                                child: Text(
+                                  "Create a Watchlist",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColorLight,
+                                      fontSize: 18,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
                               Text(
                                 "Currently Watching",
                                 style: TextStyle(
@@ -142,7 +174,7 @@ class SeriesScreen extends StatelessWidget {
                         )),
                   ),
                   const SizedBox(height: 16.0),
-                  provider.isNowPlayingLoading
+                  provider.isAiringTodayLoading
                       ? Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
@@ -152,7 +184,7 @@ class SeriesScreen extends StatelessWidget {
                           seriesList: provider.airingTodaySeriesList,
                           sectionHeader: "Airing Today"),
                   const SizedBox(height: 16.0),
-                  provider.isPopularLoading
+                  provider.isOnTheAirLoading
                       ? Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
@@ -162,7 +194,7 @@ class SeriesScreen extends StatelessWidget {
                           seriesList: provider.onTheAirSeriesList,
                           sectionHeader: "On The Air"),
                   const SizedBox(height: 16.0),
-                  provider.isTopRatedLoading
+                  provider.isPopularLoading
                       ? Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,
@@ -172,7 +204,7 @@ class SeriesScreen extends StatelessWidget {
                           seriesList: provider.popularSeriesList,
                           sectionHeader: "Popular"),
                   const SizedBox(height: 16.0),
-                  provider.isUpcomingLoading
+                  provider.isTopRatedLoading
                       ? Shimmer.fromColors(
                           baseColor: Colors.grey.shade300,
                           highlightColor: Colors.grey.shade100,

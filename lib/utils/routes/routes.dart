@@ -3,12 +3,14 @@ import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/error_screen.dart';
 import 'package:my_collection/view/home_screen.dart';
 import 'package:my_collection/view/login/login_screen.dart';
+import 'package:my_collection/view/movies/create_movie_watchlist_form.dart';
 import 'package:my_collection/view/music/album_screen.dart';
 import 'package:my_collection/view/music/artist_screen.dart';
 import 'package:my_collection/view/music/playlist_screen.dart';
 import 'package:my_collection/view/music/playlists/create_playlist_form.dart';
 import 'package:my_collection/view/music/playlists/playlist_details_screen.dart';
 import 'package:my_collection/view/music/song_screen.dart';
+import 'package:my_collection/view/series/create_series_watchlist_form.dart';
 import 'package:my_collection/view/signup/signup_screen.dart';
 import 'package:my_collection/view/splash_screen.dart';
 
@@ -35,6 +37,12 @@ class Routes {
         return SlideRightRoute(widget: const CreatePlayListForm());
       case RouteNames.playListDetails:
         return SlideRightRoute(widget: const PlayListDetailsScreen());
+
+      case RouteNames.createSeriesWatchListForm:
+        return SlideRightRoute(widget: const CreateSeriesWatchListForm());
+
+      case RouteNames.createMovieWatchListForm:
+        return SlideRightRoute(widget: const CreateMovieWatchListForm());
 
 
       default:
