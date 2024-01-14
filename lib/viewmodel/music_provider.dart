@@ -85,14 +85,6 @@ class MusicProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> fetchLikedMusic()async{
-
-  }
-
-  Future<void> fetchUserPlayLists()async{
-    await db.collection("users").get();
-  }
-
   Future<void> getArtistDetails(String artistId) async{
     isArtistDetailsLoading = true;
     notifyListeners();
