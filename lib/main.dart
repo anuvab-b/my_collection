@@ -10,9 +10,11 @@ import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
 import 'package:my_collection/viewmodel/login/login_provider.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
+import 'package:my_collection/viewmodel/movie_watchlist_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
+import 'package:my_collection/viewmodel/series_watchlist_provider.dart';
 import 'package:my_collection/viewmodel/signup/signup_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -58,7 +60,9 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => MovieProvider()),
           ChangeNotifierProvider(create: (_) => BooksProvider()),
           ChangeNotifierProvider(create: (_) => SeriesProvider()),
-          ChangeNotifierProvider(create: (_) => HomeScreenProvider())
+          ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
+          ChangeNotifierProvider(create: (_) => MovieWatchListProvider()),
+          ChangeNotifierProvider(create: (_) => SeriesWatchListProvider()),
         ],
         child: Consumer<DarkThemeProvider>(builder: (ctx, provider, child) {
             return MaterialApp(
