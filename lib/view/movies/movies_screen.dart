@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
+import 'package:my_collection/view/movies/movie_search_delegate.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -154,28 +155,36 @@ class MoviesScreen extends StatelessWidget {
                     }),
                   ),
                   const SizedBox(height: 16.0),
-                  Container(
-                    height: 64,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Theme.of(context).primaryColor),
-                      borderRadius: BorderRadius.circular(12.0),
+                  InkWell(
+                    onTap: (){
+                      showSearch(
+                        context: context,
+                        delegate: MovieSearchDelegate(buildContext: context),
+                      );
+                    },
+                    child: Container(
+                      height: 64,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Search",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w900,
+                                      color:
+                                          Theme.of(context).primaryColorLight)),
+                              Icon(Icons.search,
+                                  color: Theme.of(context).primaryColorLight)
+                            ],
+                          )),
                     ),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Search",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w900,
-                                    color:
-                                        Theme.of(context).primaryColorLight)),
-                            Icon(Icons.search,
-                                color: Theme.of(context).primaryColorLight)
-                          ],
-                        )),
                   ),
                   const SizedBox(height: 16.0),
                   provider.isNowPlayingLoading

@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/repository/movies/movie_repository.dart';
@@ -20,9 +21,16 @@ class MovieProvider extends ChangeNotifier{
   bool isPopularLoading = false;
   bool isNowPlayingLoading = false;
   bool isTopRatedLoading = false;
+  bool isSearchLoading = false;
 
   int pageIndex = 0;
   int selectedPageIndex = 0;
+
+  String searchQuery = "";
+
+  TmdbMovieResponseModel? movieSearchResponseModel;
+  Map<String, Either<String, TmdbMovieResponseModel>?> movieSearchMap = {};
+
 
   Future<void> getUpcomingMovies() async {
     isUpcomingLoading = true;
@@ -83,6 +91,30 @@ class MovieProvider extends ChangeNotifier{
       selectedPageIndex = 2;
     }
     notifyListeners();
+  }
+
+  void onSearchQueryChanged(String query){
+    searchQuery = query;
+    notifyListeners();
+  }
+
+  Future<Either<String, TmdbMovieResponseModel>?> getMovieBySearch(
+      String query) async {
+    Either<String, TmdbMovieResponseModel>? result;
+    if (movieSearchMap.containsKey(query)) {
+      result = movieSearchMap[query];
+    } else {
+      if(query.isNotEmpty) {
+        result = await movieRepository.getMovieSearchResults(query);
+        if (query.isNotEmpty) {
+          movieSearchMap.putIfAbsent(query, () => result);
+        }
+        result.fold((l) {}, (r) {
+          movieSearchResponseModel = r;
+        });
+      }
+    }
+    return result;
   }
 
 }
