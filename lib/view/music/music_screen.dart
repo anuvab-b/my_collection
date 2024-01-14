@@ -44,11 +44,29 @@ class MusicScreen extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-                onPressed: () {
+            const SizedBox(height: 16.0),
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: TextButton(
+                onPressed: () async {
                   Navigator.pushNamed(context, RouteNames.createPlayListForm);
                 },
-                icon: const Icon(Icons.add)),
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    foregroundColor: Theme.of(context).primaryColorDark),
+                child: Text(
+                  "Create a Playlist",
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColorLight,
+                      fontSize: 18,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16.0),
             Expanded(child: PlayListListView(onTap: (_) {
               provider.setSelectedPlayListIndex(_);
               Navigator.pushNamed(context, RouteNames.playListDetails);
