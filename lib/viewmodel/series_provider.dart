@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
 import 'package:my_collection/repository/tv/series_repository.dart';
@@ -24,6 +25,16 @@ class SeriesProvider extends ChangeNotifier{
 
   int pageIndex = 0;
   int selectedPageIndex = 0;
+  String searchQuery = "";
+
+
+  TmdbTvResponseModel? seriesSearchResponseModel;
+  Map<String, Either<String, TmdbTvResponseModel>?> seriesSearchMap = {};
+
+  void onSearchQueryChanged(String query){
+    searchQuery = query;
+    notifyListeners();
+  }
 
   Future<void> getAiringToday() async {
     isAiringTodayLoading = true;
@@ -81,5 +92,24 @@ class SeriesProvider extends ChangeNotifier{
       selectedPageIndex = 2;
     }
     notifyListeners();
+  }
+
+  Future<Either<String, TmdbTvResponseModel>?> getSeriesBySearch(
+      String query) async {
+    Either<String, TmdbTvResponseModel>? result;
+    if (seriesSearchMap.containsKey(query)) {
+      result = seriesSearchMap[query];
+    } else {
+      if(query.isNotEmpty) {
+        result = await seriesRepository.getTvSearchResults(query);
+        if (query.isNotEmpty) {
+          seriesSearchMap.putIfAbsent(query, () => result);
+        }
+        result.fold((l) {}, (r) {
+          seriesSearchResponseModel = r;
+        });
+      }
+    }
+    return result;
   }
 }

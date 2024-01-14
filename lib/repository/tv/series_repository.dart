@@ -89,4 +89,24 @@ class SeriesRepository{
     }
   }
 
+  Future<Either<String,TmdbTvResponseModel>> getTvSearchResults(String query)async{
+    TmdbTvResponseModel topRatedModel;
+    String token = ApiEndpoints.tmdbApiKey;
+    String url = "${ApiEndpoints.tmdbBaseUrl}search/tv?query=$query&api_key=$token";
+
+    try {
+      var res = await ApiHelper().request(url: url, headers: {}, method: HTTPMETHOD.GET);
+      if (res.statusCode == 200) {
+        topRatedModel = TmdbTvResponseModel.fromJson(res.data);
+        return right(topRatedModel);
+      }
+      else {
+        return left(res.message);
+      }
+    }
+    catch(e){
+      return left(e.toString());
+    }
+  }
+
 }
