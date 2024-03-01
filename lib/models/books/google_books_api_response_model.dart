@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:jiffy/jiffy.dart';
-import 'package:my_collection/utils/data_utils.dart';
 
 GoogleBooksApiResponseModel googleBookApiResponseModelFromJson(String str) => GoogleBooksApiResponseModel.fromJson(json.decode(str));
 
 String googleBookApiResponseModelToJson(GoogleBooksApiResponseModel data) => json.encode(data.toJson());
 
 class GoogleBooksApiResponseModel {
+  String? uuid;
   String kind;
   int totalItems;
   List<BookListItem> items;
@@ -16,11 +16,13 @@ class GoogleBooksApiResponseModel {
     required this.kind,
     required this.totalItems,
     required this.items,
+    this.uuid
   });
 
   factory GoogleBooksApiResponseModel.fromJson(Map<String, dynamic> json) => GoogleBooksApiResponseModel(
     kind: json["kind"],
     totalItems: json["totalItems"],
+    uuid: json["uuid"] ?? "",
     items: List<BookListItem>.from(json["items"].map((x) => BookListItem.fromJson(x))),
   );
 
@@ -29,6 +31,16 @@ class GoogleBooksApiResponseModel {
     "totalItems": totalItems,
     "items": List<dynamic>.from(items.map((x) => x.toJson())),
   };
+
+  GoogleBooksApiResponseModel copyWith(
+      {String? kind, String? uuid, List<BookListItem>? items}) {
+    return GoogleBooksApiResponseModel(
+        kind: kind ?? this.kind,
+        items: items ?? this.items,
+        totalItems: items?.length ?? this?.items.length ?? 0,
+        uuid: uuid ?? this.uuid
+    );
+  }
 }
 
 class BookListItem {

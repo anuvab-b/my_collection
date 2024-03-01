@@ -21,15 +21,11 @@ enum BookFilterCategories { relevance, newest }
 class BooksProvider extends ChangeNotifier {
   BooksRepository booksRepository = BooksRepository();
 
-  GoogleBooksApiResponseModel booksOnSelfImprovement =
-      GoogleBooksApiResponseModel(
-          kind: "books#volumes", totalItems: 0, items: []);
-  GoogleBooksApiResponseModel booksOnFinance = GoogleBooksApiResponseModel(
-      kind: "books#volumes", totalItems: 0, items: []);
-  GoogleBooksApiResponseModel booksOnPsychology = GoogleBooksApiResponseModel(
-      kind: "books#volumes", totalItems: 0, items: []);
-  GoogleBooksApiResponseModel booksOnCrime = GoogleBooksApiResponseModel(
-      kind: "books#volumes", totalItems: 0, items: []);
+  Map<String,List<BookListItem>> bookDataMap = {};
+  List<BookListItem> booksOnSelfImprovement = List.empty(growable: true);
+  List<BookListItem> booksOnFinance = List.empty(growable: true);
+  List<BookListItem> booksOnPsychology = List.empty(growable: true);
+  List<BookListItem> booksOnCrime = List.empty(growable: true);
 
   BookFilterCategories filterCategory = BookFilterCategories.newest;
 
@@ -38,55 +34,95 @@ class BooksProvider extends ChangeNotifier {
   bool isPsychologyLoading = false;
   bool isCrimeLoading = false;
 
+  void fetchBookHomeScreenData(){
+    getBooksOnSelfImprovement();
+    getBooksOnFinance();
+    getBooksOnPsychology();
+    getBooksOnCrime();
+  }
+
   Future<void> getBooksOnSelfImprovement() async {
-    isSelfImpLoading = true;
-    notifyListeners();
-    var result = await booksRepository.fetchBooksByQuery(
-        DataUtils.getBookCategoryStringFromEnum(BookCategories.selfImprovement),
-        orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-    isSelfImpLoading = false;
-    result.fold((l) {}, (r) {
-      booksOnSelfImprovement = r;
-    });
+    String bookCategory = DataUtils.getBookCategoryStringFromEnum(BookCategories.selfImprovement);
+
+    if(bookDataMap.containsKey(bookCategory)){
+      booksOnSelfImprovement = bookDataMap[bookCategory]!;
+    }
+    else {
+      isSelfImpLoading = true;
+      notifyListeners();
+      var result = await booksRepository.fetchBooksByQuery(bookCategory,
+          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
+      isSelfImpLoading = false;
+      result.fold((l) {}, (r) {
+        booksOnSelfImprovement = r.items;
+        bookDataMap.putIfAbsent(bookCategory, () => booksOnSelfImprovement);
+      });
+    }
     notifyListeners();
   }
 
   Future<void> getBooksOnFinance() async {
-    isFinanceLoading = true;
-    notifyListeners();
-    var result = await booksRepository.fetchBooksByQuery(
-        DataUtils.getBookCategoryStringFromEnum(BookCategories.finance),
-        orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-    isFinanceLoading = false;
-    result.fold((l) {}, (r) {
-      booksOnFinance = r;
-    });
+    String bookCategory = DataUtils.getBookCategoryStringFromEnum(BookCategories.finance);
+
+    if(bookDataMap.containsKey(bookCategory)){
+      booksOnFinance = bookDataMap[bookCategory]!;
+    }
+    else {
+      isFinanceLoading = true;
+      notifyListeners();
+      var result = await booksRepository.fetchBooksByQuery(
+          bookCategory,
+          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
+      isFinanceLoading = false;
+      result.fold((l) {}, (r) {
+        booksOnFinance = r.items;
+        bookDataMap.putIfAbsent(bookCategory, () => booksOnFinance);
+
+      });
+    }
     notifyListeners();
   }
 
   Future<void> getBooksOnPsychology() async {
-    isPsychologyLoading = true;
-    notifyListeners();
-    var result = await booksRepository.fetchBooksByQuery(
-        DataUtils.getBookCategoryStringFromEnum(BookCategories.psychology),
-        orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-    isPsychologyLoading = false;
-    result.fold((l) {}, (r) {
-      booksOnPsychology = r;
-    });
+    String bookCategory = DataUtils.getBookCategoryStringFromEnum(BookCategories.psychology);
+
+
+    if(bookDataMap.containsKey(bookCategory)){
+      booksOnPsychology = bookDataMap[bookCategory]!;
+    }
+    else {
+      isPsychologyLoading = true;
+      notifyListeners();
+      var result = await booksRepository.fetchBooksByQuery(
+          bookCategory,
+          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
+      isPsychologyLoading = false;
+      result.fold((l) {}, (r) {
+        booksOnPsychology = r.items;
+        bookDataMap.putIfAbsent(bookCategory, () => booksOnPsychology);
+      });
+    }
     notifyListeners();
   }
 
   Future<void> getBooksOnCrime() async {
-    isCrimeLoading = true;
-    notifyListeners();
-    var result = await booksRepository.fetchBooksByQuery(
-        DataUtils.getBookCategoryStringFromEnum(BookCategories.crime),
-        orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-    isCrimeLoading = false;
-    result.fold((l) {}, (r) {
-      booksOnCrime = r;
-    });
+    String bookCategory = DataUtils.getBookCategoryStringFromEnum(BookCategories.crime);
+
+    if(bookDataMap.containsKey(bookCategory)){
+      booksOnPsychology = bookDataMap[bookCategory]!;
+    }
+    else {
+      isCrimeLoading = true;
+      notifyListeners();
+      var result = await booksRepository.fetchBooksByQuery(
+          bookCategory,
+          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
+      isCrimeLoading = false;
+      result.fold((l) {}, (r) {
+        booksOnCrime = r.items;
+        bookDataMap.putIfAbsent(bookCategory, () => booksOnCrime);
+      });
+    }
     notifyListeners();
   }
 }

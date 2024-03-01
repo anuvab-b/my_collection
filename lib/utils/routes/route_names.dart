@@ -19,4 +19,6 @@ class RouteNames{
   static const String createMovieWatchListForm = "movie-watchlist-form";
   static const String movieWatchListDetails = "movie-watchlist-details";
 
+  static const String createReadingListForm = "reading-list-form";
+  static const String readingListDetails = "reading-list-details";
 }
