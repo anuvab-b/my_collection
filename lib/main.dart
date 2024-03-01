@@ -13,6 +13,7 @@ import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:my_collection/viewmodel/movie_watchlist_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
+import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:my_collection/viewmodel/series_watchlist_provider.dart';
 import 'package:my_collection/viewmodel/signup/signup_provider.dart';
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => PlayListProvider()),
           ChangeNotifierProvider(create: (_) => MovieProvider()),
           ChangeNotifierProvider(create: (_) => BooksProvider()),
+          ChangeNotifierProvider(create: (_) => ReadingListProvider()),
           ChangeNotifierProvider(create: (_) => SeriesProvider()),
           ChangeNotifierProvider(create: (_) => HomeScreenProvider()),
           ChangeNotifierProvider(create: (_) => MovieWatchListProvider()),
