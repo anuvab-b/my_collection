@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:jiffy/jiffy.dart';
+import 'package:my_collection/utils/DateUtils.dart';
 
 GoogleBooksApiResponseModel googleBookApiResponseModelFromJson(String str) => GoogleBooksApiResponseModel.fromJson(json.decode(str));
 
@@ -242,7 +241,7 @@ class VolumeInfo {
     title: json["title"],
     subtitle: json["subtitle"],
     authors: json["authors"] == null ? [] : List<String>.from(json["authors"]!.map((x) => x)),
-    publishedDate: (json["publishedDate"] == null || json["publishedDate"].length<10) ? null : Jiffy.parse(json["publishedDate"]).dateTime,
+    publishedDate: (json["publishedDate"] == null || json["publishedDate"].length<10) ? null : DateUtils.getDateTime(json["publishedDate"]),
     description: json["description"],
     readingModes: ReadingModes.fromJson(json["readingModes"]),
     pageCount: json["pageCount"],
