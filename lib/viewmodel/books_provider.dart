@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
@@ -33,6 +34,12 @@ class BooksProvider extends ChangeNotifier {
   bool isFinanceLoading = false;
   bool isPsychologyLoading = false;
   bool isCrimeLoading = false;
+  String searchQuery = "";
+
+  void onSearchQueryChanged(String query){
+    searchQuery = query;
+    notifyListeners();
+  }
 
   void fetchBookHomeScreenData(){
     getBooksOnSelfImprovement();
@@ -109,7 +116,7 @@ class BooksProvider extends ChangeNotifier {
     String bookCategory = DataUtils.getBookCategoryStringFromEnum(BookCategories.crime);
 
     if(bookDataMap.containsKey(bookCategory)){
-      booksOnPsychology = bookDataMap[bookCategory]!;
+      booksOnCrime = bookDataMap[bookCategory]!;
     }
     else {
       isCrimeLoading = true;
@@ -124,5 +131,24 @@ class BooksProvider extends ChangeNotifier {
       });
     }
     notifyListeners();
+  }
+
+  Future<Either<String,List<BookListItem>>> getBookBySearch(
+      String query) async {
+    List<BookListItem> bookList = [];
+    if (bookDataMap.containsKey(query)) {
+      bookList = bookDataMap[query]!;
+    } else {
+      if(query.isNotEmpty) {
+        var result = await booksRepository.fetchBooksByQuery(query,orderBy: DataUtils.getBookFilterStringFromEnum(BookFilterCategories.relevance));
+        result.fold((l) {
+          return left(l);
+        }, (r) {
+          bookList = r.items;
+          bookDataMap.putIfAbsent(query, () => bookList);
+        });
+      }
+    }
+    return right(bookList);
   }
 }

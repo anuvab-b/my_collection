@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
+import 'package:my_collection/view/books/book_search_delegate.dart';
 import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/reading_list_provider.dart';
@@ -76,6 +77,38 @@ class BooksScreen extends StatelessWidget {
                             fontFamily: "Poppins",
                             fontWeight: FontWeight.w600),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  InkWell(
+                    onTap: (){
+                      showSearch(
+                        context: context,
+                        delegate: BookSearchDelegate(buildContext: context),
+                      );
+                    },
+                    child: Container(
+                      height: 64,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Search",
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w900,
+                                      color:
+                                      Theme.of(context).primaryColorLight)),
+                              Icon(Icons.search,
+                                  color: Theme.of(context).primaryColorLight)
+                            ],
+                          )),
                     ),
                   ),
                   const SizedBox(height: 16.0),
