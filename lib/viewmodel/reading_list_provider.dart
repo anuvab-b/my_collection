@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadingListProvider extends ChangeNotifier {
@@ -9,8 +10,8 @@ class ReadingListProvider extends ChangeNotifier {
   late FirebaseAuth firebaseAuth;
   late FirebaseFirestore db;
   late Uuid uuid;
-  List<dynamic> readingLists = List.empty(growable: true);
-  var selectedReadingListModel;
+  List<GoogleBooksApiResponseModel> readingLists = List.empty(growable: true);
+  late GoogleBooksApiResponseModel selectedReadingListModel;
 
   int selectedReadingListIndex = -1;
   bool isLoadingReadingLists = false;
@@ -45,27 +46,26 @@ class ReadingListProvider extends ChangeNotifier {
     });
 
     isLoadingReadingLists = false;
-    readingLists = snapshot.docs.map((e) => e.data()).toList();
+    readingLists = snapshot.docs.map((e) => GoogleBooksApiResponseModel.fromJson(e.data())).toList();
     notifyListeners();
   }
 
   Future<void> createNewReadingList() async {
     final User? user = firebaseAuth.currentUser;
-    selectedReadingListModel = {};
+    selectedReadingListModel = GoogleBooksApiResponseModel(kind: readingListNameTextController.text, totalItems: [].length, items: []);
     var snapshot = await db
         .collection("users")
         .doc(user?.email)
         .collection("reading-lists")
-        .doc(selectedReadingListModel.name)
+        .doc(selectedReadingListModel.kind)
         .set(selectedReadingListModel.toJson());
 
     fetchReadingLists();
   }
 
-  Future<void> addNewBookToReadingList(var book, int index) async {
+  Future<void> addNewBookToReadingList(BookListItem book, int index) async {
     final User? user = firebaseAuth.currentUser;
-    List<dynamic> books = selectedReadingListModel.items;
-    var book = {};
+    List<BookListItem> books = selectedReadingListModel.items;
     books.add(book);
     selectedReadingListModel = selectedReadingListModel.copyWith(items: books);
 
@@ -73,7 +73,7 @@ class ReadingListProvider extends ChangeNotifier {
         .collection("users")
         .doc(user?.email)
         .collection("reading-lists")
-        .doc(selectedReadingListModel.name)
+        .doc(selectedReadingListModel.kind)
         .set(selectedReadingListModel.toJson());
     fetchReadingLists();
   }

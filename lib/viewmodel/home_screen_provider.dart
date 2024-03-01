@@ -3,6 +3,7 @@ import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
+import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,9 @@ class HomeScreenProvider extends ChangeNotifier{
 
     if(index == 0){
       BooksProvider booksProvider = Provider.of<BooksProvider>(context,listen: false);
-      booksProvider.getBooksOnSelfImprovement();
-      booksProvider.getBooksOnFinance();
-      booksProvider.getBooksOnPsychology();
-      booksProvider.getBooksOnCrime();
+      ReadingListProvider readingListProvider = Provider.of<ReadingListProvider>(context,listen: false);
+      booksProvider.fetchBookHomeScreenData();
+      readingListProvider.fetchReadingLists();
     }
 
     if(index == 1) {
