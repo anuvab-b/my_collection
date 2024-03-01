@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
+import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -17,21 +19,85 @@ class BooksScreen extends StatelessWidget {
           child: Container(
               margin: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Consumer<ReadingListProvider>(
+                      builder: (context, readListProvider, child) {
+                    return readListProvider.readingLists.isNotEmpty
+                        ? SizedBox(
+                            height: 180,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (ctx, index) {
+                                  GoogleBooksApiResponseModel bookModel =
+                                      readListProvider.readingLists[index];
+                                  return Card(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: 120,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Icon(Icons.book_rounded),
+                                          Text(bookModel.kind,
+                                              style: const TextStyle(
+                                                  fontFamily: "Poppins")),
+                                          Text(
+                                              "${bookModel.items.length} items",
+                                              style: const TextStyle(
+                                                  fontFamily: "Poppins")),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                                itemCount:
+                                    readListProvider.readingLists.length))
+                        : const SizedBox();
+                  }),
+                  const SizedBox(height: 16.0),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                      onPressed: () async {
+                        Navigator.pushNamed(
+                            context, RouteNames.createReadingListForm);
+                      },
+                      style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Theme.of(context).primaryColorDark),
+                      child: Text(
+                        "Create a Reading list",
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColorLight,
+                            fontSize: 18,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
                   HorizontalBookPosterListViewSection(
-                      bookList: provider.booksOnSelfImprovement.items,
-                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(BookCategories.selfImprovement),
+                      bookList: provider.booksOnSelfImprovement,
+                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(
+                          BookCategories.selfImprovement),
                       isSectionLoading: provider.isSelfImpLoading),
                   HorizontalBookPosterListViewSection(
-                      bookList: provider.booksOnFinance.items,
-                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(BookCategories.finance),
-                      isSectionLoading: provider.isFinanceLoading), HorizontalBookPosterListViewSection(
-                      bookList: provider.booksOnPsychology.items,
-                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(BookCategories.psychology),
+                      bookList: provider.booksOnFinance,
+                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(
+                          BookCategories.finance),
+                      isSectionLoading: provider.isFinanceLoading),
+                  HorizontalBookPosterListViewSection(
+                      bookList: provider.booksOnPsychology,
+                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(
+                          BookCategories.psychology),
                       isSectionLoading: provider.isPsychologyLoading),
                   HorizontalBookPosterListViewSection(
-                      bookList: provider.booksOnCrime.items,
-                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(BookCategories.crime),
+                      bookList: provider.booksOnCrime,
+                      sectionHeader: DataUtils.getBookCategoryStringFromEnum(
+                          BookCategories.crime),
                       isSectionLoading: provider.isCrimeLoading)
                 ],
               )));
@@ -96,7 +162,8 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                                     progressIndicatorBuilder:
                                         (context, url, progress) => Center(
                                       child: CircularProgressIndicator(
-                                        color: Theme.of(context).primaryColorLight,
+                                        color:
+                                            Theme.of(context).primaryColorLight,
                                         value: progress.progress,
                                       ),
                                     ),
@@ -117,7 +184,6 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                               children: [
                                 Flexible(
                                   child: Text(
@@ -126,13 +192,14 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                                     style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         color:
-                                        Theme.of(context).primaryColorLight,
+                                            Theme.of(context).primaryColorLight,
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: "Poppins"),
                                   ),
                                 ),
-                                if(book?.volumeInfo.publishedDate?.year!=null)
+                                if (book?.volumeInfo.publishedDate?.year !=
+                                    null)
                                   Container(
                                     padding: const EdgeInsets.all(2.0),
                                     decoration: BoxDecoration(
@@ -144,8 +211,8 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                                       maxLines: 1,
                                       style: TextStyle(
                                           overflow: TextOverflow.ellipsis,
-                                          color:
-                                          Theme.of(context).primaryColorLight,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.w600,
                                           fontFamily: "Poppins"),
