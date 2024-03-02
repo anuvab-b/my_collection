@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:my_collection/utils/date_utils.dart';
+
 TmdbMovieResponseModel tmdbMovieResponseModelFromJson(String str) => TmdbMovieResponseModel.fromJson(json.decode(str));
 
 String tmdbMovieResponseModelToJson(TmdbMovieResponseModel data) => json.encode(data.toJson());
@@ -24,6 +26,8 @@ class TmdbMovieResponseModel {
   });
 
   factory TmdbMovieResponseModel.fromJson(Map<String, dynamic> json) => TmdbMovieResponseModel(
+    name: json["name"] ?? "",
+    uuid: json["uuid"] ?? "",
     dates: json["dates"] == null ? null : Dates.fromJson(json["dates"]),
     page: json["page"],
     results: json["results"] == null ? [] : List<MovieListModel>.from(json["results"]!.map((x) => MovieListModel.fromJson(x))),
@@ -34,7 +38,7 @@ class TmdbMovieResponseModel {
   Map<String, dynamic> toJson() => {
     "name": name,
     "uuid": uuid,
-    "results": results == null ? [] : List<dynamic>.from(results!.map((x) => x.toJson())),
+    "results": List<dynamic>.from(results!.map((x) => x.toJson())),
   };
 
   TmdbMovieResponseModel copyWith(
@@ -110,7 +114,7 @@ class MovieListModel {
     overview: json["overview"],
     popularity: json["popularity"]?.toDouble(),
     posterPath: json["poster_path"],
-    releaseDate: json["release_date"] == null ? null : DateTime.parse(json["release_date"]),
+    releaseDate: json["release_date"] == null ? null : DateUtils.getDateTime(json["release_date"]),
     title: json["title"],
     video: json["video"],
     voteAverage: json["vote_average"]?.toDouble(),

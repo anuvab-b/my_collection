@@ -22,4 +22,8 @@ class RouteNames{
   static const String createReadingListForm = "reading-list-form";
   static const String readingListDetails = "reading-list-details";
   static const String bookDetailsScreen = "book-details";
+
+  static const String movieDetailsScreen = "movie-details";
+  static const String seriesDetailsScreen = "series-details";
+
 }
