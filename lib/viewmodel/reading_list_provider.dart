@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
+import 'package:my_collection/utils/data_utils.dart';
+import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadingListProvider extends ChangeNotifier {
@@ -63,7 +65,7 @@ class ReadingListProvider extends ChangeNotifier {
     fetchReadingLists();
   }
 
-  Future<void> addNewBookToReadingList(BookListItem book, int index) async {
+  Future<void> addNewBookToReadingList(BookListItem book) async {
     final User? user = firebaseAuth.currentUser;
     List<BookListItem> books = selectedReadingListModel.items;
     books.add(book);
