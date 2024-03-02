@@ -7,6 +7,7 @@ import 'package:my_collection/view/error_screen.dart';
 import 'package:my_collection/view/home_screen.dart';
 import 'package:my_collection/view/login/login_screen.dart';
 import 'package:my_collection/view/movies/create_movie_watchlist_form.dart';
+import 'package:my_collection/view/movies/movie_details_screen.dart';
 import 'package:my_collection/view/music/album_screen.dart';
 import 'package:my_collection/view/music/artist_screen.dart';
 import 'package:my_collection/view/music/playlist_screen.dart';
@@ -14,6 +15,7 @@ import 'package:my_collection/view/music/playlists/create_playlist_form.dart';
 import 'package:my_collection/view/music/playlists/playlist_details_screen.dart';
 import 'package:my_collection/view/music/song_screen.dart';
 import 'package:my_collection/view/series/create_series_watchlist_form.dart';
+import 'package:my_collection/view/series/series_details_screen.dart';
 import 'package:my_collection/view/signup/signup_screen.dart';
 import 'package:my_collection/view/splash_screen.dart';
 
@@ -53,6 +55,11 @@ class Routes {
       //   return SlideRightRoute(widget: const ReadingListDetailsScreen());
       case RouteNames.bookDetailsScreen:
         return SlideRightRoute(widget: const BookDetailsScreen());
+
+      case RouteNames.movieDetailsScreen:
+        return SlideRightRoute(widget: const MovieDetailsScreen());
+      case RouteNames.seriesDetailsScreen:
+        return SlideRightRoute(widget: const SeriesDetailsScreen());
 
       default:
         return MaterialPageRoute(builder: (context) => const ErrorScreen());

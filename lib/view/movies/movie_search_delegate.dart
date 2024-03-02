@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/view/movies/movie_watchlist_list_view.dart';
 import 'package:my_collection/view/widgets/common_loader.dart';
+import 'package:my_collection/view/widgets/common_network_image.dart';
 import 'package:my_collection/viewmodel/movie_provider.dart';
 import 'package:my_collection/viewmodel/movie_watchlist_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +33,7 @@ class MovieSearchDelegate extends SearchDelegate {
         icon: const Icon(Icons.clear),
         onPressed: () {
           final movieProvider =
-          Provider.of<MovieProvider>(context, listen: false);
+              Provider.of<MovieProvider>(context, listen: false);
           movieProvider.onSearchQueryChanged(query);
           query = '';
         },
@@ -56,9 +59,8 @@ class MovieSearchDelegate extends SearchDelegate {
         child: FutureBuilder(
             future: provider.getMovieBySearch(query),
             builder: (BuildContext context,
-                AsyncSnapshot<
-                    Either<String, TmdbMovieResponseModel>?>
-                snapshot) {
+                AsyncSnapshot<Either<String, TmdbMovieResponseModel>?>
+                    snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
                   child: CupertinoActivityIndicator(),
@@ -91,136 +93,226 @@ class MovieSearchDelegate extends SearchDelegate {
                             shrinkWrap: true,
                             itemCount: searchResponseModel?.results.length,
                             itemBuilder: (ctx, index) {
-                              MovieListModel movieListModel = searchResponseModel!.results[index];
+                              MovieListModel movieListModel =
+                                  searchResponseModel!.results[index];
                               return Container(
                                   padding:
-                                  const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                                  child: Row(children: [
-                                    // SizedBox(
-                                    //     height: 48,
-                                    //     width: 48,
-                                    //     child: (trackItem != null &&
-                                    //         trackItem.album != null &&
-                                    //         trackItem
-                                    //             .album!.images.isNotEmpty)
-                                    //         ? ClipRRect(
-                                    //       borderRadius:
-                                    //       BorderRadius.circular(2),
-                                    //       child: CachedNetworkImage(
-                                    //         fit: BoxFit.fill,
-                                    //         progressIndicatorBuilder:
-                                    //             (context, url,
-                                    //             progress) =>
-                                    //             Center(
-                                    //               child:
-                                    //               CircularProgressIndicator(
-                                    //                 value: progress.progress,
-                                    //                 color: Theme.of(context)
-                                    //                     .primaryColorLight,
-                                    //               ),
-                                    //             ),
-                                    //         imageUrl:
-                                    //         "${trackItem?.album?.images.first.url}",
-                                    //       ),
-                                    //     )
-                                    //         : CommonPlaceholderNetworkImage()),
-                                    const SizedBox(width: 8.0),
-                                    Flexible(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(movieListModel?.title ?? "",
-                                              maxLines: 1,
-                                              overflow: TextOverflow.clip,
-                                              style: TextStyle(
-                                                  fontFamily: "Poppins",
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Theme.of(context)
-                                                      .highlightColor)),
-                                          const SizedBox(height: 4.0),
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
-                                        child: const Icon(Icons.more_vert),
-                                        onTap: () {
-                                          showModalBottomSheet(
-                                            // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
-                                              clipBehavior: Clip.antiAlias,
-                                              // Set shape to make top corners rounded
-                                              shape:
-                                              const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(16),
-                                                  topRight: Radius.circular(16),
+                                      const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Flexible(
+                                          child: Row(
+                                            children: [
+                                              SizedBox(
+                                                  width: 60,
+                                                  height: 80,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    child: CachedNetworkImage(
+                                                      errorWidget:
+                                                          (context, value, value2) {
+                                                        return const CommonPlaceholderNetworkImage();
+                                                      },
+                                                      fit: BoxFit.fill,
+                                                      progressIndicatorBuilder:
+                                                          (context, url,
+                                                                  progress) =>
+                                                              Center(
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColorLight,
+                                                          value:
+                                                              progress.progress,
+                                                        ),
+                                                      ),
+                                                      imageUrl:
+                                                          "${ApiEndpoints.tmdbPosterPath}${movieListModel.posterPath}",
+                                                    ),
+                                                  )),
+                                              const SizedBox(width: 8.0),
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        movieListModel?.title ??
+                                                            "",
+                                                        maxLines: 1,
+                                                        overflow:
+                                                            TextOverflow.clip,
+                                                        style: TextStyle(
+                                                            fontFamily:
+                                                                "Poppins",
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .highlightColor)),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .end,
+                                                      children: [
+                                                        const Icon(
+                                                            Icons.star_rounded,
+                                                            color:
+                                                                Colors.amber),
+                                                        const SizedBox(
+                                                            width: 2.0),
+                                                        Text(
+                                                          movieListModel
+                                                                  .voteAverage
+                                                                  ?.toStringAsFixed(
+                                                                      1) ??
+                                                              "",
+                                                          maxLines: 1,
+                                                          style: TextStyle(
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColorLight,
+                                                              fontSize: 14.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontFamily:
+                                                                  "Poppins"),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 4.0),
+                                                    if(movieListModel.releaseDate?.year!=null)
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4.0),
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      ),
+                                                      child: Text(
+                                                        "${movieListModel.releaseDate?.year}",
+                                                        maxLines: 1,
+                                                        style: TextStyle(
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColorLight,
+                                                            fontSize: 12.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              enableDrag: true,
-                                              // isScrollControlled: true,
-                                              context: context,
-                                              builder: (context) {
-                                                return Consumer<
-                                                    MovieWatchListProvider>(
-                                                    builder: (context, provider,
-                                                        child) {
+                                            ],
+                                          ),
+                                        ),
+                                        InkWell(
+                                            child: const Icon(Icons.more_vert),
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
+                                                  clipBehavior: Clip.antiAlias,
+                                                  // Set shape to make top corners rounded
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(16),
+                                                      topRight:
+                                                          Radius.circular(16),
+                                                    ),
+                                                  ),
+                                                  enableDrag: true,
+                                                  // isScrollControlled: true,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Consumer<
+                                                            MovieWatchListProvider>(
+                                                        builder: (context,
+                                                            provider, child) {
                                                       return Container(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 16.0,
-                                                              vertical: 16.0),
-                                                          color: Theme.of(context)
-                                                              .primaryColor,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      16.0,
+                                                                  vertical:
+                                                                      16.0),
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
                                                           child: Column(
                                                             crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               const Text(
-                                                                  "Add to a Playlist",
+                                                                  "Add to a Movie Watchlist",
                                                                   style: TextStyle(
                                                                       fontFamily:
-                                                                      "Poppins",
+                                                                          "Poppins",
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
+                                                                          FontWeight
+                                                                              .w700,
                                                                       fontSize:
-                                                                      24)),
+                                                                          24)),
                                                               Expanded(child:
-                                                              MovieWatchListListView(
-                                                                  onTap:
-                                                                      (_) async {
-                                                                    showDialog(
-                                                                        context:
+                                                                  MovieWatchListListView(
+                                                                      onTap:
+                                                                          (_) async {
+                                                                showDialog(
+                                                                    context:
                                                                         context,
-                                                                        barrierDismissible:
+                                                                    barrierDismissible:
                                                                         false,
-                                                                        barrierColor: Colors
+                                                                    barrierColor:
+                                                                        Colors
                                                                             .transparent,
-                                                                        builder: (ctx) {
-                                                                          return const CommonLoader();
-                                                                        });
-                                                                    await provider
-                                                                        .addNewMovieToWatchList(
+                                                                    builder:
+                                                                        (ctx) {
+                                                                      return const CommonLoader();
+                                                                    });
+                                                                await provider
+                                                                    .addNewMovieToWatchList(
                                                                         movieListModel,
                                                                         _);
-                                                                    if (context
-                                                                        .mounted) {
-                                                                      Navigator.of(
+                                                                if (context
+                                                                    .mounted) {
+                                                                  Navigator.of(
                                                                           context)
-                                                                          .pop();
-                                                                      Navigator.of(
+                                                                      .pop();
+                                                                  Navigator.of(
                                                                           context)
-                                                                          .pop();
-                                                                    }
-                                                                  })),
+                                                                      .pop();
+                                                                }
+                                                              })),
                                                             ],
                                                           ));
                                                     });
-                                              });
-                                        })
-                                  ]));
+                                                  });
+                                            })
+                                      ]));
                             })
                       ],
                     ),
