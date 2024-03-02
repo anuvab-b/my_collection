@@ -8,6 +8,7 @@ import 'package:my_collection/utils/data_utils.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/music/playlists/playlist_list_view.dart';
 import 'package:my_collection/view/widgets/common_loader.dart';
+import 'package:my_collection/view/widgets/common_network_image.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
 import 'package:provider/provider.dart';
@@ -130,9 +131,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                       "${trackItem?.album?.images.first.url}",
                                                 ),
                                               )
-                                            : Image.network(
-                                                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                                fit: BoxFit.fill)),
+                                            : const CommonPlaceholderNetworkImage()),
                                     const SizedBox(width: 8.0),
                                     Flexible(
                                       child: Column(
@@ -301,9 +300,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                       "${albumElement?.images.first.url}",
                                                 ),
                                               )
-                                            : Image.network(
-                                                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                                fit: BoxFit.fill)),
+                                            : const CommonPlaceholderNetworkImage()),
                                     const SizedBox(width: 8.0),
                                     Flexible(
                                       child: Column(
@@ -421,9 +418,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                         "${artistItem.images.first.url}",
                                                   ),
                                                 )
-                                              : Image.network(
-                                                  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                                  fit: BoxFit.fill)),
+                                              : const CommonPlaceholderNetworkImage()),
                                       const SizedBox(width: 8.0),
                                       Flexible(
                                         child: Column(
@@ -516,9 +511,7 @@ class MusicSearchDelegate extends SearchDelegate {
                                                       "${playListItem.images.first.url}",
                                                 ),
                                               )
-                                            : Image.network(
-                                                "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                                fit: BoxFit.fill)),
+                                            : const CommonPlaceholderNetworkImage()),
                                     const SizedBox(width: 8.0),
                                     Flexible(
                                       child: Column(

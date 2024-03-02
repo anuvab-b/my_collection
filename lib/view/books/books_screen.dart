@@ -4,6 +4,7 @@ import 'package:my_collection/models/books/google_books_api_response_model.dart'
 import 'package:my_collection/utils/data_utils.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/books/book_search_delegate.dart';
+import 'package:my_collection/view/widgets/common_network_image.dart';
 import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/reading_list_provider.dart';

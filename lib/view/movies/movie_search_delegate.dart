@@ -123,9 +123,7 @@ class MovieSearchDelegate extends SearchDelegate {
                                     //         "${trackItem?.album?.images.first.url}",
                                     //       ),
                                     //     )
-                                    //         : Image.network(
-                                    //         "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                    //         fit: BoxFit.fill)),
+                                    //         : CommonPlaceholderNetworkImage()),
                                     const SizedBox(width: 8.0),
                                     Flexible(
                                       child: Column(
