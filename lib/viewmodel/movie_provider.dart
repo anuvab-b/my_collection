@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:my_collection/models/movies/tmdb_movie_credits_response_model.dart';
+import 'package:my_collection/models/movies/tmdb_movie_details_response_model.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
 import 'package:my_collection/repository/movies/movie_repository.dart';
 
@@ -22,14 +24,26 @@ class MovieProvider extends ChangeNotifier{
   bool isNowPlayingLoading = false;
   bool isTopRatedLoading = false;
   bool isSearchLoading = false;
+  bool isMovieDetailsLoading = false;
+  bool isMovieCreditsLoading = false;
 
   int pageIndex = 0;
   int selectedPageIndex = 0;
 
   String searchQuery = "";
 
+  MovieListModel? selectedMovieListModel;
   TmdbMovieResponseModel? movieSearchResponseModel;
+  TmdbMovieCreditsResponseModel? movieCreditsResponseModel;
+  TmdbMovieDetailsResponseModel? movieDetailsResponseModel;
   Map<String, Either<String, TmdbMovieResponseModel>?> movieSearchMap = {};
+
+  void fetchMovieHomeData(){
+    getNowPlayingMovies();
+    getPopularMovies();
+    getTopRatedMovies();
+    getUpcomingMovies();
+  }
 
 
   Future<void> getUpcomingMovies() async {
@@ -117,4 +131,30 @@ class MovieProvider extends ChangeNotifier{
     return result;
   }
 
+  setSelectedMovieListItem(MovieListModel item){
+    selectedMovieListModel = item;
+    notifyListeners();
+  }
+
+  Future<void> fetchMovieDetails() async {
+    isMovieDetailsLoading = true;
+    notifyListeners();
+    var result = await movieRepository.getMovieDetails("${selectedMovieListModel?.id}");
+    isMovieDetailsLoading = false;
+    notifyListeners();
+    result.fold((l){}, (r){
+      movieDetailsResponseModel = r;
+    });
+  }
+
+  Future<void> fetchMovieCredits() async {
+    isMovieCreditsLoading = true;
+    notifyListeners();
+    var result = await movieRepository.getMovieCredits("${selectedMovieListModel?.id}");
+    isMovieCreditsLoading = false;
+    notifyListeners();
+    result.fold((l){}, (r){
+      movieCreditsResponseModel = r;
+    });
+  }
 }
