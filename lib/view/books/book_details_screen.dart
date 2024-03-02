@@ -174,7 +174,7 @@ class BookDetailsScreen extends StatelessWidget {
                                                 return const CommonLoader();
                                               });
                                           await provider
-                                              .addNewBookToReadingList(book, _);
+                                              .addNewBookToReadingList(book);
                                           if (context.mounted) {
                                             Navigator.of(context).pop();
                                             Navigator.of(context).pop();
