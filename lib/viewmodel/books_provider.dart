@@ -17,6 +17,14 @@ enum BookCategories {
   romance
 }
 
+// enum BookShelves{
+//   favorites,
+//   purchased,
+//   toRead,
+//   readingNow,
+//   haveRead
+// }
+
 enum BookFilterCategories { relevance, newest }
 
 class BooksProvider extends ChangeNotifier {
@@ -35,6 +43,8 @@ class BooksProvider extends ChangeNotifier {
   bool isPsychologyLoading = false;
   bool isCrimeLoading = false;
   String searchQuery = "";
+
+  BookListItem? selectedBookListItem;
 
   void onSearchQueryChanged(String query){
     searchQuery = query;
