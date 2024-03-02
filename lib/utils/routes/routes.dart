@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
+import 'package:my_collection/view/books/book_details_screen.dart';
 import 'package:my_collection/view/books/create_readinglist_form.dart';
 import 'package:my_collection/view/books/readinglist_details_screen.dart';
 import 'package:my_collection/view/error_screen.dart';
@@ -50,6 +51,8 @@ class Routes {
         return SlideRightRoute(widget: const CreateReadingListForm());
       case RouteNames.readingListDetails:
         return SlideRightRoute(widget: const ReadingListDetailsScreen());
+      case RouteNames.bookDetailsScreen:
+        return SlideRightRoute(widget: const BookDetailsScreen());
 
       default:
         return MaterialPageRoute(builder: (context) => const ErrorScreen());

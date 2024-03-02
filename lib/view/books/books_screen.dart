@@ -175,98 +175,104 @@ class HorizontalBookPosterListViewSection extends StatelessWidget {
                     itemCount: bookList.length,
                     itemBuilder: (ctx, index) {
                       BookListItem book = bookList[index];
-                      return Container(
-                        margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
-                        width: 150,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                                width: 150,
-                                height: 200,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: CachedNetworkImage(
-                                    errorWidget: (context, value, value2) {
-                                      return Image.network(
-                                          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                                          fit: BoxFit.fill);
-                                    },
-                                    fit: BoxFit.fill,
-                                    progressIndicatorBuilder:
-                                        (context, url, progress) => Center(
-                                      child: CircularProgressIndicator(
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        value: progress.progress,
+                      return InkWell(
+                        onTap: (){
+                          BooksProvider provider = Provider.of<BooksProvider>(context, listen: false);
+                          provider.setSelectedBookListItem(book);
+                          Navigator.pushNamed(
+                              context, RouteNames.bookDetailsScreen);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
+                          width: 150,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                  width: 150,
+                                  height: 200,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: CachedNetworkImage(
+                                      errorWidget: (context, value, value2) {
+                                        return const CommonPlaceholderNetworkImage();
+                                      },
+                                      fit: BoxFit.fill,
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                          color:
+                                              Theme.of(context).primaryColorLight,
+                                          value: progress.progress,
+                                        ),
                                       ),
+                                      imageUrl:
+                                          "${book?.volumeInfo?.imageLinks?.thumbnail}",
                                     ),
-                                    imageUrl:
-                                        "${book?.volumeInfo?.imageLinks?.thumbnail}",
-                                  ),
-                                )),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              book?.volumeInfo?.title ?? "",
-                              maxLines: 1,
-                              style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: "Poppins"),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    "By ${book?.volumeInfo.authors?.join(',') ?? ""}",
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: "Poppins"),
-                                  ),
-                                ),
-                                if (book?.volumeInfo.publishedDate?.year !=
-                                    null)
-                                  Container(
-                                    padding: const EdgeInsets.all(2.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4.0),
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                                  )),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                book?.volumeInfo?.title ?? "",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: "Poppins"),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
                                     child: Text(
-                                      "${book?.volumeInfo.publishedDate?.year ?? ""}",
+                                      "By ${book?.volumeInfo.authors?.join(',') ?? ""}",
                                       maxLines: 1,
                                       style: TextStyle(
                                           overflow: TextOverflow.ellipsis,
-                                          color: Theme.of(context)
-                                              .primaryColorLight,
+                                          color:
+                                              Theme.of(context).primaryColorLight,
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.w600,
                                           fontFamily: "Poppins"),
                                     ),
                                   ),
-                              ],
-                            ),
-                            // Row(
-                            //     mainAxisAlignment: MainAxisAlignment.end,
-                            //     children: [
-                            //       IconButton(
-                            //           iconSize: 16.0,
-                            //           onPressed: () {},
-                            //           icon: const Icon(CupertinoIcons.heart)),
-                            //       IconButton(
-                            //           iconSize: 16.0,
-                            //           onPressed: () {},
-                            //           icon: const Icon(CupertinoIcons.bookmark))
-                            //     ])
-                          ],
+                                  if (book?.volumeInfo.publishedDate?.year !=
+                                      null)
+                                    Container(
+                                      padding: const EdgeInsets.all(2.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4.0),
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      child: Text(
+                                        "${book?.volumeInfo.publishedDate?.year ?? ""}",
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Poppins"),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              // Row(
+                              //     mainAxisAlignment: MainAxisAlignment.end,
+                              //     children: [
+                              //       IconButton(
+                              //           iconSize: 16.0,
+                              //           onPressed: () {},
+                              //           icon: const Icon(CupertinoIcons.heart)),
+                              //       IconButton(
+                              //           iconSize: 16.0,
+                              //           onPressed: () {},
+                              //           icon: const Icon(CupertinoIcons.bookmark))
+                              //     ])
+                            ],
+                          ),
                         ),
                       );
                     })

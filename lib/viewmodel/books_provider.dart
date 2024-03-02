@@ -151,4 +151,9 @@ class BooksProvider extends ChangeNotifier {
     }
     return right(bookList);
   }
+
+  setSelectedBookListItem(BookListItem item){
+    selectedBookListItem = item;
+    notifyListeners();
+  }
 }
