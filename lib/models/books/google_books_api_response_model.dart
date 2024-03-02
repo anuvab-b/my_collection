@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:my_collection/utils/DateUtils.dart';
+import 'package:my_collection/utils/date_utils.dart';
 
 GoogleBooksApiResponseModel googleBookApiResponseModelFromJson(String str) => GoogleBooksApiResponseModel.fromJson(json.decode(str));
 
@@ -77,12 +77,8 @@ class BookListItem {
   Map<String, dynamic> toJson() => {
     "kind": kind,
     "id": id,
-    "etag": etag,
     "selfLink": selfLink,
-    "volumeInfo": volumeInfo.toJson(),
-    "saleInfo": saleInfo.toJson(),
-    "accessInfo": accessInfo.toJson(),
-    "searchInfo": searchInfo?.toJson(),
+    "volumeInfo": volumeInfo.toJson()
   };
 }
 
@@ -198,6 +194,7 @@ class VolumeInfo {
   String title;
   String? subtitle;
   List<String>? authors;
+  List<String>? categories;
   DateTime? publishedDate;
   String? description;
   ReadingModes readingModes;
@@ -219,6 +216,7 @@ class VolumeInfo {
     required this.title,
     this.subtitle,
     this.authors,
+    this.categories,
     required this.publishedDate,
     this.description,
     required this.readingModes,
@@ -241,6 +239,7 @@ class VolumeInfo {
     title: json["title"],
     subtitle: json["subtitle"],
     authors: json["authors"] == null ? [] : List<String>.from(json["authors"]!.map((x) => x)),
+    categories: json["categories"] == null ? [] : List<String>.from(json["categories"]!.map((x) => x)),
     publishedDate: (json["publishedDate"] == null || json["publishedDate"].length<10) ? null : DateUtils.getDateTime(json["publishedDate"]),
     description: json["description"],
     readingModes: ReadingModes.fromJson(json["readingModes"]),
@@ -267,8 +266,6 @@ class VolumeInfo {
     "pageCount": pageCount,
     "printType": printType,
     "maturityRating": maturityRating,
-    "allowAnonLogging": allowAnonLogging,
-    "contentVersion": contentVersion,
     "imageLinks": imageLinks?.toJson(),
     "language": language,
     "previewLink": previewLink,
@@ -276,7 +273,6 @@ class VolumeInfo {
     "canonicalVolumeLink": canonicalVolumeLink,
     "averageRating": averageRating,
     "ratingsCount": ratingsCount,
-    "panelizationSummary": panelizationSummary?.toJson(),
   };
 }
 
