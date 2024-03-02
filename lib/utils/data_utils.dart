@@ -78,4 +78,19 @@ class DataUtils {
         return "";
     }
   }
+
+  static String getAuthorNamesStringFromList(List<String>? names) {
+    if (names == null || names.isEmpty) {
+      return "";
+    } else if (names.length < 2) {
+      return names.first;
+    } else if (names.length >= 2) {
+      String str = "";
+      for (var name in names) {
+        str += "$name, ";
+      }
+      return str.substring(0, str.length - 2);
+    }
+    return "";
+  }
 }

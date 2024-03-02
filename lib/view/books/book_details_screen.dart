@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
+import 'package:my_collection/view/books/readinglist_list_view.dart';
+import 'package:my_collection/view/widgets/common_loader.dart';
 import 'package:my_collection/view/widgets/common_network_image.dart';
 import 'package:my_collection/view/widgets/common_text.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
+import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:provider/provider.dart';
 
 class BookDetailsScreen extends StatelessWidget {
@@ -36,6 +39,7 @@ class BookDetailsScreen extends StatelessWidget {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 32.0),
                     Center(
                       child: SizedBox(
                           width: 300,
@@ -124,29 +128,81 @@ class BookDetailsScreen extends StatelessWidget {
                   ],
                 )),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 16.0),
-                  width: MediaQuery.of(context).size.width,
-                  child: TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(
-                              color: Theme.of(context).primaryColorLight),
-                        ),
-                        backgroundColor: Colors.white,
-                        foregroundColor: Theme.of(context).primaryColorDark),
-                    child: const Text(
-                      "Add to your Library",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )),
+              if (book != null)
+                Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 16.0),
+                    width: MediaQuery.of(context).size.width,
+                    child: TextButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                            // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
+                            clipBehavior: Clip.antiAlias,
+                            // Set shape to make top corners rounded
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(16),
+                                topRight: Radius.circular(16),
+                              ),
+                            ),
+                            enableDrag: true,
+                            // isScrollControlled: true,
+                            context: context,
+                            builder: (context) {
+                              return Consumer<ReadingListProvider>(
+                                  builder: (context, provider, child) {
+                                return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0, vertical: 16.0),
+                                    color: Theme.of(context).primaryColor,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("Add to a Reading list",
+                                            style: TextStyle(
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 24)),
+                                        Expanded(child: ReadingListListView(
+                                            onTap: (_) async {
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              barrierColor: Colors.transparent,
+                                              builder: (ctx) {
+                                                return const CommonLoader();
+                                              });
+                                          await provider
+                                              .addNewBookToReadingList(book, _);
+                                          if (context.mounted) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pop();
+                                          }
+                                        })),
+                                      ],
+                                    ));
+                              });
+                            });
+                      },
+                      style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                                color: Theme.of(context).primaryColorLight),
+                          ),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Theme.of(context).primaryColorDark),
+                      child: const Text(
+                        "Add to your Library",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )),
             ],
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
+import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/books/readinglist_list_view.dart';
 import 'package:my_collection/view/widgets/common_loader.dart';
 import 'package:my_collection/view/widgets/common_network_image.dart';
@@ -92,163 +93,176 @@ class BookSearchDelegate extends SearchDelegate {
                             itemCount: books.length,
                             itemBuilder: (ctx, index) {
                               BookListItem bookListModel = books[index];
-                              return Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(4, 8, 4, 8),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 60,
-                                                  height: 80,
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
-                                                    child: CachedNetworkImage(
-                                                      errorWidget: (context,
-                                                          value, value2) {
-                                                        return const CommonPlaceholderNetworkImage();
-                                                      },
-                                                      fit: BoxFit.fill,
-                                                      progressIndicatorBuilder:
-                                                          (context, url,
-                                                                  progress) =>
-                                                              Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColorLight,
-                                                          value:
-                                                              progress.progress,
-                                                        ),
-                                                      ),
-                                                      imageUrl:
-                                                          "${bookListModel?.volumeInfo?.imageLinks?.thumbnail}",
-                                                    ),
-                                                  )),
-                                              const SizedBox(width: 8.0),
-                                              Flexible(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        bookListModel
-                                                                ?.volumeInfo
-                                                                ?.title ??
-                                                            "",
-                                                        maxLines: 3,
-                                                        overflow:
-                                                            TextOverflow.clip,
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                "Poppins",
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w600,
+                              return InkWell(
+                                onTap: () {
+                                  provider
+                                      .setSelectedBookListItem(bookListModel);
+                                  Navigator.pushNamed(
+                                      context, RouteNames.bookDetailsScreen);
+                                },
+                                child: Container(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Flexible(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                    width: 60,
+                                                    height: 80,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      child: CachedNetworkImage(
+                                                        errorWidget: (context,
+                                                            value, value2) {
+                                                          return const CommonPlaceholderNetworkImage();
+                                                        },
+                                                        fit: BoxFit.fill,
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    progress) =>
+                                                                Center(
+                                                          child:
+                                                              CircularProgressIndicator(
                                                             color: Theme.of(
                                                                     context)
-                                                                .highlightColor)),
-                                                    const SizedBox(height: 4.0),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        InkWell(
-                                            child: const Icon(Icons.more_vert),
-                                            onTap: () {
-                                              showModalBottomSheet(
-                                                  // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
-                                                  clipBehavior: Clip.antiAlias,
-                                                  // Set shape to make top corners rounded
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(16),
-                                                      topRight:
-                                                          Radius.circular(16),
-                                                    ),
+                                                                .primaryColorLight,
+                                                            value: progress
+                                                                .progress,
+                                                          ),
+                                                        ),
+                                                        imageUrl:
+                                                            "${bookListModel?.volumeInfo?.imageLinks?.thumbnail}",
+                                                      ),
+                                                    )),
+                                                const SizedBox(width: 8.0),
+                                                Flexible(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          bookListModel
+                                                                  ?.volumeInfo
+                                                                  ?.title ??
+                                                              "",
+                                                          maxLines: 3,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                          style: TextStyle(
+                                                              fontFamily:
+                                                                  "Poppins",
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .highlightColor)),
+                                                      const SizedBox(
+                                                          height: 4.0),
+                                                    ],
                                                   ),
-                                                  enableDrag: true,
-                                                  // isScrollControlled: true,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return Consumer<
-                                                            ReadingListProvider>(
-                                                        builder: (context,
-                                                            provider, child) {
-                                                      return Container(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      16.0,
-                                                                  vertical:
-                                                                      16.0),
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .primaryColor,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              const Text(
-                                                                  "Add to a Playlist",
-                                                                  style: TextStyle(
-                                                                      fontFamily:
-                                                                          "Poppins",
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w700,
-                                                                      fontSize:
-                                                                          24)),
-                                                              Expanded(child:
-                                                                  ReadingListListView(
-                                                                      onTap:
-                                                                          (_) async {
-                                                                showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    barrierDismissible:
-                                                                        false,
-                                                                    barrierColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    builder:
-                                                                        (ctx) {
-                                                                      return const CommonLoader();
-                                                                    });
-                                                                await provider
-                                                                    .addNewBookToReadingList(
-                                                                        bookListModel,
-                                                                        _);
-                                                                if (context
-                                                                    .mounted) {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                }
-                                                              })),
-                                                            ],
-                                                          ));
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          InkWell(
+                                              child:
+                                                  const Icon(Icons.more_vert),
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                    // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    // Set shape to make top corners rounded
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(16),
+                                                        topRight:
+                                                            Radius.circular(16),
+                                                      ),
+                                                    ),
+                                                    enableDrag: true,
+                                                    // isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return Consumer<
+                                                              ReadingListProvider>(
+                                                          builder: (context,
+                                                              provider, child) {
+                                                        return Container(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        16.0,
+                                                                    vertical:
+                                                                        16.0),
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                const Text(
+                                                                    "Add to a Reading list",
+                                                                    style: TextStyle(
+                                                                        fontFamily:
+                                                                            "Poppins",
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w700,
+                                                                        fontSize:
+                                                                            24)),
+                                                                Expanded(child:
+                                                                    ReadingListListView(
+                                                                        onTap:
+                                                                            (_) async {
+                                                                  showDialog(
+                                                                      context:
+                                                                          context,
+                                                                      barrierDismissible:
+                                                                          false,
+                                                                      barrierColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      builder:
+                                                                          (ctx) {
+                                                                        return const CommonLoader();
+                                                                      });
+                                                                  await provider
+                                                                      .addNewBookToReadingList(
+                                                                          bookListModel,
+                                                                          _);
+                                                                  if (context
+                                                                      .mounted) {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  }
+                                                                })),
+                                                              ],
+                                                            ));
+                                                      });
                                                     });
-                                                  });
-                                            })
-                                      ]));
+                                              })
+                                        ])),
+                              );
                             })
                       ],
                     ),
