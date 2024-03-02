@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:my_collection/utils/date_utils.dart';
+
 TmdbTvResponseModel tmdbTvResponseModelFromJson(String str) => TmdbTvResponseModel.fromJson(json.decode(str));
 
 String tmdbTvResponseModelToJson(TmdbTvResponseModel data) => json.encode(data.toJson());
@@ -90,7 +92,7 @@ class SeriesListModel {
     overview: json["overview"],
     popularity: json["popularity"]?.toDouble(),
     posterPath: json["poster_path"],
-    firstAirDate: json["first_air_date"] == null ? null : DateTime.parse(json["first_air_date"]),
+    firstAirDate: json["first_air_date"] == null ? null : DateUtils.getDateTime(json["first_air_date"]),
     name: json["name"],
     voteAverage: json["vote_average"]?.toDouble(),
     voteCount: json["vote_count"],
