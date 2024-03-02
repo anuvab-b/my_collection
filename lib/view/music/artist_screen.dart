@@ -294,7 +294,7 @@ class ArtistScreen extends StatelessWidget {
                                                             .first
                                                             .url ??
                                                         "")
-                                                : const CommonNetworkImage(),
+                                                : const CommonPlaceholderNetworkImage(),
                                             const SizedBox(width: 16.0),
                                             Flexible(
                                               child: Column(
@@ -394,7 +394,7 @@ class ArtistScreen extends StatelessWidget {
                                                                   .first
                                                                   .url ??
                                                               ""))
-                                                  : const CommonNetworkImage(),
+                                                  : const CommonPlaceholderNetworkImage(),
                                               const SizedBox(height: 8.0),
                                               Text(
                                                 artist.name ?? "",

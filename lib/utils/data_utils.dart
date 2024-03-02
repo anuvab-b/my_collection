@@ -3,6 +3,9 @@ import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/music_provider.dart';
 
 class DataUtils {
+  static String imagePlaceholderUrl =
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png";
+
   static String getBookCategoryStringFromEnum(BookCategories category) {
     switch (category) {
       case BookCategories.selfImprovement:
