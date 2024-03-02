@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_collection/utils/data_utils.dart';
 
-class CommonNetworkImage extends StatelessWidget {
-  const CommonNetworkImage({Key? key}) : super(key: key);
+class CommonPlaceholderNetworkImage extends StatelessWidget {
+  const CommonPlaceholderNetworkImage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-        fit: BoxFit.fill);
+    return Image.network(DataUtils.imagePlaceholderUrl, fit: BoxFit.fill);
   }
 }
