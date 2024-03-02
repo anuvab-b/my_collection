@@ -49,8 +49,8 @@ class Routes {
 
       case RouteNames.createReadingListForm:
         return SlideRightRoute(widget: const CreateReadingListForm());
-      case RouteNames.readingListDetails:
-        return SlideRightRoute(widget: const ReadingListDetailsScreen());
+      // case RouteNames.readingListDetails:
+      //   return SlideRightRoute(widget: const ReadingListDetailsScreen());
       case RouteNames.bookDetailsScreen:
         return SlideRightRoute(widget: const BookDetailsScreen());
 

@@ -28,6 +28,23 @@ class DataUtils {
         : "Relevance";
   }
 
+  // static String getBookshelfStringFromEnum(BookShelves bookshelf) {
+  //   switch (bookshelf) {
+  //     case BookShelves.favorites:
+  //       return "Favourites";
+  //     case BookShelves.purchased:
+  //       return "Purchased";
+  //     case BookShelves.toRead:
+  //       return "To Read";
+  //     case BookShelves.readingNow:
+  //       return "Reading Now";
+  //     case BookShelves.haveRead:
+  //       return "Have Read";
+  //     default:
+  //       return "";
+  //   }
+  // }
+
   static String getMusicSearchFilterCategoryFromEnum(
       MusicSearchCategories category) {
     switch (category) {
@@ -64,8 +81,8 @@ class DataUtils {
     }
   }
 
-  static String formatTrackType(String type){
-    switch(type){
+  static String formatTrackType(String type) {
+    switch (type) {
       case "track":
         return "Song";
       case "album":
