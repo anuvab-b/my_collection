@@ -20,6 +20,7 @@ class CommonText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
+      textScaleFactor: 1.0,
       style: TextStyle(
           fontFamily: "Poppins",
           fontWeight: fontWeight,
