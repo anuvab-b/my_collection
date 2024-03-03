@@ -287,95 +287,104 @@ class HorizontalSeriesPosterListViewSection extends StatelessWidget {
               itemCount: seriesList.length,
               itemBuilder: (ctx, index) {
                 SeriesListModel movie = seriesList[index];
-                return Container(
-                  margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
-                  width: 180,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                          height: 180,
-                          width: 180,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.fill,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColorLight,
-                                  value: progress.progress,
+                return InkWell(
+                  onTap: (){
+                    SeriesProvider provider = Provider.of<SeriesProvider>(context, listen: false);
+                    provider.setSelectedSeriesListItem(movie);
+                    provider.fetchSeriesAggCredits();
+                    provider.fetchSeriesDetails();
+                    Navigator.pushNamed(context, RouteNames.seriesDetailsScreen);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
+                    width: 180,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                            height: 180,
+                            width: 180,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.fill,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Theme.of(context).primaryColorLight,
+                                    value: progress.progress,
+                                  ),
                                 ),
+                                imageUrl:
+                                    "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
                               ),
-                              imageUrl:
-                                  "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
+                            )),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          movie.originalName ?? "",
+                          maxLines: 1,
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Theme.of(context).primaryColorLight,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w300,
+                              fontFamily: "Poppins"),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Icon(Icons.star_rounded,
+                                    color: Colors.amber),
+                                const SizedBox(width: 2.0),
+                                Text(
+                                  movie.voteAverage?.toStringAsFixed(1) ?? "",
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      color:
+                                          Theme.of(context).primaryColorLight,
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Poppins"),
+                                ),
+                              ],
                             ),
-                          )),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        movie.originalName ?? "",
-                        maxLines: 1,
-                        style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            color: Theme.of(context).primaryColorLight,
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w300,
-                            fontFamily: "Poppins"),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const Icon(Icons.star_rounded,
-                                  color: Colors.amber),
-                              const SizedBox(width: 2.0),
-                              Text(
-                                movie.voteAverage?.toStringAsFixed(1) ?? "",
+                            Container(
+                              padding: const EdgeInsets.all(2.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              child: Text(
+                                "${movie.firstAirDate?.year ?? ""}",
                                 maxLines: 1,
                                 style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
-                                    color:
-                                        Theme.of(context).primaryColorLight,
-                                    fontSize: 14.0,
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontSize: 12.0,
                                     fontWeight: FontWeight.w600,
                                     fontFamily: "Poppins"),
                               ),
-                            ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(2.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4.0),
-                              color: Theme.of(context).primaryColor,
                             ),
-                            child: Text(
-                              "${movie.firstAirDate?.year ?? ""}",
-                              maxLines: 1,
-                              style: TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  color: Theme.of(context).primaryColorLight,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "Poppins"),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // Row(
-                      //     mainAxisAlignment: MainAxisAlignment.end,
-                      //     children: [
-                      //       IconButton(
-                      //           iconSize: 16.0,
-                      //           onPressed: () {},
-                      //           icon: const Icon(CupertinoIcons.heart)),
-                      //       IconButton(
-                      //           iconSize: 16.0,
-                      //           onPressed: () {},
-                      //           icon: const Icon(CupertinoIcons.bookmark))
-                      //     ])
-                    ],
+                          ],
+                        ),
+                        // Row(
+                        //     mainAxisAlignment: MainAxisAlignment.end,
+                        //     children: [
+                        //       IconButton(
+                        //           iconSize: 16.0,
+                        //           onPressed: () {},
+                        //           icon: const Icon(CupertinoIcons.heart)),
+                        //       IconButton(
+                        //           iconSize: 16.0,
+                        //           onPressed: () {},
+                        //           icon: const Icon(CupertinoIcons.bookmark))
+                        //     ])
+                      ],
+                    ),
                   ),
                 );
               }),
