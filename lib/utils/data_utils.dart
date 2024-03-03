@@ -1,6 +1,53 @@
 import 'package:jiffy/jiffy.dart';
-import 'package:my_collection/viewmodel/books_provider.dart';
-import 'package:my_collection/viewmodel/music_provider.dart';
+
+enum BookShelves{
+  favorites,
+  purchased,
+  toRead,
+  readingNow,
+  haveRead
+}
+enum BookFilterCategories { relevance, newest }
+enum BookCategories {
+  selfImprovement,
+  finance,
+  psychology,
+  personalityDevelopment,
+  selfLove,
+  selfHelp,
+  crime,
+  thriller,
+  communicationSkills,
+  romance
+}
+enum MovieWatchLists{
+  favourites,
+  reWatch,
+  toWatch,
+  watchingNow,
+  haveWatched
+}
+
+enum SeriesWatchLists{
+  favourites,
+  reWatch,
+  toWatch,
+  watchingNow,
+  haveWatched
+}
+
+enum MusicPlaylists{
+  favourites
+}
+enum MusicSearchCategories {
+  album,
+  artist,
+  playlist,
+  track,
+  show,
+  episode,
+  audiobook
+}
 
 class DataUtils {
   static String imagePlaceholderUrl =
@@ -28,22 +75,65 @@ class DataUtils {
         : "Relevance";
   }
 
-  // static String getBookshelfStringFromEnum(BookShelves bookshelf) {
-  //   switch (bookshelf) {
-  //     case BookShelves.favorites:
-  //       return "Favourites";
-  //     case BookShelves.purchased:
-  //       return "Purchased";
-  //     case BookShelves.toRead:
-  //       return "To Read";
-  //     case BookShelves.readingNow:
-  //       return "Reading Now";
-  //     case BookShelves.haveRead:
-  //       return "Have Read";
-  //     default:
-  //       return "";
-  //   }
-  // }
+  static String getBookshelfStringFromEnum(BookShelves bookshelf) {
+    switch (bookshelf) {
+      case BookShelves.favorites:
+        return "Favourites";
+      case BookShelves.purchased:
+        return "Purchased";
+      case BookShelves.toRead:
+        return "To Read";
+      case BookShelves.readingNow:
+        return "Reading Now";
+      case BookShelves.haveRead:
+        return "Have Read";
+      default:
+        return "";
+    }
+  }
+
+  static String getMovieWatchlistStringFromEnum(MovieWatchLists moviePlaylist) {
+    switch (moviePlaylist) {
+      case MovieWatchLists.favourites:
+        return "Favourites";
+      case MovieWatchLists.haveWatched:
+        return "Have Watched";
+      case MovieWatchLists.reWatch:
+        return "Watch Again";
+      case MovieWatchLists.toWatch:
+        return "To Watch";
+      case MovieWatchLists.watchingNow:
+        return "Watching Now";
+      default:
+        return "";
+    }
+  }
+
+  static String getSeriesWatchlistStringFromEnum(SeriesWatchLists seriesPlaylist) {
+    switch (seriesPlaylist) {
+      case SeriesWatchLists.favourites:
+        return "Favourites";
+      case SeriesWatchLists.haveWatched:
+        return "Have Watched";
+      case SeriesWatchLists.reWatch:
+        return "Watch Again";
+      case SeriesWatchLists.toWatch:
+        return "To Watch";
+      case SeriesWatchLists.watchingNow:
+        return "Watching Now";
+      default:
+        return "";
+    }
+  }
+
+  static String getMusicPlaylistStringFromEnum(MusicPlaylists musicPlaylist) {
+    switch (musicPlaylist) {
+      case MusicPlaylists.favourites:
+        return "Favourites";
+      default:
+        return "";
+    }
+  }
 
   static String getMusicSearchFilterCategoryFromEnum(
       MusicSearchCategories category) {
