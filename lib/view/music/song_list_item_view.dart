@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart'
     as search;
+import 'package:my_collection/view/widgets/common_network_image.dart';
 
 class SongListItemView extends StatelessWidget {
   final String name;
@@ -35,9 +36,7 @@ class SongListItemView extends StatelessWidget {
                         imageUrl: "${album?.images.first.url}",
                       ),
                     )
-                  : Image.network(
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-                      fit: BoxFit.fill)),
+                  : const CommonPlaceholderNetworkImage()),
           const SizedBox(width: 8.0),
           Flexible(
             child: Column(
