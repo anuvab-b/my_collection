@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/data/network/network.dart';
+import 'package:my_collection/models/tv/tmdb_tv_agg_credits_response_model.dart';
+import 'package:my_collection/models/tv/tmdb_tv_details_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
 
 class SeriesRepository{
@@ -109,4 +111,42 @@ class SeriesRepository{
     }
   }
 
+  Future<Either<String,TmdbTvAggCreditsResponseModel>> getSeriesAggCredits(String seriesId) async{
+    TmdbTvAggCreditsResponseModel creditsResponseModel;
+    String token = ApiEndpoints.tmdbApiKey;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/$seriesId/aggregate_credits?api_key=$token";
+
+    try {
+      var res = await ApiHelper().request(url: url, headers: {}, method: HTTPMETHOD.GET);
+      if (res.statusCode == 200) {
+        creditsResponseModel = TmdbTvAggCreditsResponseModel.fromJson(res.data);
+        return right(creditsResponseModel);
+      }
+      else {
+        return left(res.message);
+      }
+    }
+    catch(e){
+      return left(e.toString());
+    }
+  }
+  Future<Either<String,TmdbTvDetailsResponseModel>> getSeriesDetails(String seriesId) async{
+    TmdbTvDetailsResponseModel responseModel;
+    String token = ApiEndpoints.tmdbApiKey;
+    String url = "${ApiEndpoints.tmdbBaseUrl}tv/$seriesId?api_key=$token";
+
+    try {
+      var res = await ApiHelper().request(url: url, headers: {}, method: HTTPMETHOD.GET);
+      if (res.statusCode == 200) {
+        responseModel = TmdbTvDetailsResponseModel.fromJson(res.data);
+        return right(responseModel);
+      }
+      else {
+        return left(res.message);
+      }
+    }
+    catch(e){
+      return left(e.toString());
+    }
+  }
 }
