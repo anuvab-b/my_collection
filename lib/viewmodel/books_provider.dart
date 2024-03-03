@@ -4,29 +4,6 @@ import 'package:my_collection/models/books/google_books_api_response_model.dart'
 import 'package:my_collection/utils/data_utils.dart';
 import 'package:my_collection/repository/books_repository.dart';
 
-enum BookCategories {
-  selfImprovement,
-  finance,
-  psychology,
-  personalityDevelopment,
-  selfLove,
-  selfHelp,
-  crime,
-  thriller,
-  communicationSkills,
-  romance
-}
-
-// enum BookShelves{
-//   favorites,
-//   purchased,
-//   toRead,
-//   readingNow,
-//   haveRead
-// }
-
-enum BookFilterCategories { relevance, newest }
-
 class BooksProvider extends ChangeNotifier {
   BooksRepository booksRepository = BooksRepository();
 

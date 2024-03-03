@@ -7,16 +7,7 @@ import 'package:my_collection/models/music/artists/spotify_artist_related_artist
 import 'package:my_collection/models/music/artists/spotify_artist_top_tracks.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart';
 import 'package:my_collection/repository/music_repository.dart';
-
-enum MusicSearchCategories {
-  album,
-  artist,
-  playlist,
-  track,
-  show,
-  episode,
-  audiobook
-}
+import 'package:my_collection/utils/data_utils.dart';
 
 class MusicProvider extends ChangeNotifier {
   late FirebaseFirestore db;

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/music/playlists/playlist_model.dart';
 import 'package:my_collection/models/music/spotify_search_response_model.dart';
+import 'package:my_collection/utils/data_utils.dart';
 import 'package:uuid/uuid.dart';
 
 class PlayListProvider extends ChangeNotifier {
@@ -64,6 +65,11 @@ class PlayListProvider extends ChangeNotifier {
   Future<void> fetchMusicPlayLists() async {
     final User? user = firebaseAuth.currentUser;
 
+    List<String> musicPlaylistNames = [];
+    for (var val in MusicPlaylists.values) {
+      musicPlaylistNames.add(DataUtils.getMusicPlaylistStringFromEnum(val));
+    }
+
     isLoadingPlayLists = true;
     notifyListeners();
 
@@ -80,11 +86,37 @@ class PlayListProvider extends ChangeNotifier {
     isLoadingPlayLists = false;
     playLists =
         snapshot.docs.map((e) => PlayListModel.fromJson(e.data())).toList();
+    for (PlayListModel i in playLists) {
+      if (musicPlaylistNames.contains(i?.name)) {
+        continue;
+      } else {
+        createBatchPlaylist();
+        break;
+      }
+    }
+
     notifyListeners();
   }
 
   setSelectedPlayListIndex(int index){
     selectedPlayListIndex = index;
     notifyListeners();
+  }
+
+  Future<void> createBatchPlaylist() async {
+    debugPrint("createBatchSeriesWatchList: Committing batch");
+    var batch = db.batch();
+    final User? user = firebaseAuth.currentUser;
+
+    for(var val in MusicPlaylists.values){
+      String value = DataUtils.getMusicPlaylistStringFromEnum(val);
+      selectedPlayListModel = PlayListModel(items: [],name: value,uuid: uuid.v4());
+      batch.set(db
+          .collection("users")
+          .doc(user?.email)
+          .collection("music-playlists")
+          .doc(selectedPlayListModel!.name), selectedPlayListModel!.toJson());
+    }
+    await batch.commit();
   }
 }
