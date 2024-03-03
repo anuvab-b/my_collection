@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_collection/models/tv/tmdb_tv_agg_credits_response_model.dart';
+import 'package:my_collection/models/tv/tmdb_tv_details_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
 import 'package:my_collection/repository/tv/series_repository.dart';
 
@@ -22,13 +24,18 @@ class SeriesProvider extends ChangeNotifier{
   bool isTopRatedLoading = false;
   bool isOnTheAirLoading = false;
   bool isAiringTodayLoading = false;
+  bool isSeriesDetailsLoading = false;
+  bool isSeriesAggCreditsLoading = false;
 
   int pageIndex = 0;
   int selectedPageIndex = 0;
   String searchQuery = "";
 
 
+  SeriesListModel? selectedSeriesListModel;
   TmdbTvResponseModel? seriesSearchResponseModel;
+  TmdbTvAggCreditsResponseModel? seriesAggCreditsResponseModel;
+  TmdbTvDetailsResponseModel? seriesDetailsResponseModel;
   Map<String, Either<String, TmdbTvResponseModel>?> seriesSearchMap = {};
 
   void onSearchQueryChanged(String query){
@@ -111,5 +118,32 @@ class SeriesProvider extends ChangeNotifier{
       }
     }
     return result;
+  }
+
+  setSelectedSeriesListItem(SeriesListModel item){
+    selectedSeriesListModel = item;
+    notifyListeners();
+  }
+
+  Future<void> fetchSeriesDetails() async {
+    isSeriesDetailsLoading = true;
+    notifyListeners();
+    var result = await seriesRepository.getSeriesDetails("${selectedSeriesListModel?.id}");
+    isSeriesDetailsLoading = false;
+    notifyListeners();
+    result.fold((l){}, (r){
+      seriesDetailsResponseModel = r;
+    });
+  }
+
+  Future<void> fetchSeriesAggCredits() async {
+    isSeriesAggCreditsLoading = true;
+    notifyListeners();
+    var result = await seriesRepository.getSeriesAggCredits("${selectedSeriesListModel?.id}");
+    isSeriesAggCreditsLoading = false;
+    notifyListeners();
+    result.fold((l){}, (r){
+      seriesAggCreditsResponseModel = r;
+    });
   }
 }
