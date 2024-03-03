@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
+import 'package:my_collection/utils/data_utils.dart';
 import 'package:uuid/uuid.dart';
 
 class MovieWatchListProvider extends ChangeNotifier{
@@ -32,6 +33,11 @@ class MovieWatchListProvider extends ChangeNotifier{
   Future<void> fetchMovieWatchlistLists() async {
     final User? user = firebaseAuth.currentUser;
 
+    List<String> movieWatchlistNames = [];
+    for(var val in MovieWatchLists.values) {
+      movieWatchlistNames.add(DataUtils.getMovieWatchlistStringFromEnum(val));
+    }
+
     isLoadingMovieWatchLists = true;
     notifyListeners();
 
@@ -47,6 +53,17 @@ class MovieWatchListProvider extends ChangeNotifier{
 
     isLoadingMovieWatchLists = false;
     movieWatchLists = snapshot.docs.map((e) => TmdbMovieResponseModel.fromJson(e.data())).toList();
+
+    for(TmdbMovieResponseModel i in movieWatchLists){
+      if(movieWatchlistNames.contains(i?.name)){
+        continue;
+      }
+      else{
+        createBatchMovieWatchList();
+        break;
+      }
+    }
+
     notifyListeners();
   }
 
@@ -80,5 +97,22 @@ class MovieWatchListProvider extends ChangeNotifier{
         .doc(selectedMovieWatchListModel!.name)
         .set(selectedMovieWatchListModel!.toJson());
     fetchMovieWatchlistLists();
+  }
+
+  Future<void> createBatchMovieWatchList() async {
+    debugPrint("createBatchMovieWatchList: Committing batch");
+    var batch = db.batch();
+    final User? user = firebaseAuth.currentUser;
+
+    for(var val in MovieWatchLists.values){
+      String value = DataUtils.getMovieWatchlistStringFromEnum(val);
+      selectedMovieWatchListModel = TmdbMovieResponseModel(results: [],name: value,uuid: uuid.v4());
+      batch.set(db
+          .collection("users")
+          .doc(user?.email)
+          .collection("movie-watchlists")
+          .doc(selectedMovieWatchListModel!.name), selectedMovieWatchListModel!.toJson());
+    }
+    await batch.commit();
   }
 }

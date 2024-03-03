@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
+import 'package:my_collection/utils/data_utils.dart';
 import 'package:uuid/uuid.dart';
 
-class SeriesWatchListProvider extends ChangeNotifier{
+class SeriesWatchListProvider extends ChangeNotifier {
   late TextEditingController seriesWatchListNameTextController;
   late FocusNode seriesWatchListNameNode;
   late FirebaseAuth firebaseAuth;
@@ -32,6 +33,10 @@ class SeriesWatchListProvider extends ChangeNotifier{
   Future<void> fetchWatchListLists() async {
     final User? user = firebaseAuth.currentUser;
 
+    List<String> seriesWatchlistNames = [];
+    for (var val in SeriesWatchLists.values) {
+      seriesWatchlistNames.add(DataUtils.getSeriesWatchlistStringFromEnum(val));
+    }
     isLoadingSeriesWatchLists = true;
     notifyListeners();
 
@@ -46,13 +51,28 @@ class SeriesWatchListProvider extends ChangeNotifier{
     });
 
     isLoadingSeriesWatchLists = false;
-    seriesWatchLists = snapshot.docs.map((e) => TmdbTvResponseModel.fromJson(e.data())).toList();
+    seriesWatchLists = snapshot.docs
+        .map((e) => TmdbTvResponseModel.fromJson(e.data()))
+        .toList();
+
+    for (TmdbTvResponseModel i in seriesWatchLists) {
+      if (seriesWatchlistNames.contains(i?.name)) {
+        continue;
+      } else {
+        createBatchSeriesWatchList();
+        break;
+      }
+    }
+
     notifyListeners();
   }
 
   Future<void> createNewSeriesWatchList() async {
     final User? user = firebaseAuth.currentUser;
-    selectedSeriesWatchListModel = TmdbTvResponseModel(results: [],name: seriesWatchListNameTextController.text,uuid: uuid.v4());
+    selectedSeriesWatchListModel = TmdbTvResponseModel(
+        results: [],
+        name: seriesWatchListNameTextController.text,
+        uuid: uuid.v4());
     var snapshot = await db
         .collection("users")
         .doc(user?.email)
@@ -63,11 +83,13 @@ class SeriesWatchListProvider extends ChangeNotifier{
     fetchWatchListLists();
   }
 
-  Future<void> addNewSeriesToWatchList(SeriesListModel series, int index) async {
+  Future<void> addNewSeriesToWatchList(
+      SeriesListModel series, int index) async {
     final User? user = firebaseAuth.currentUser;
     List<SeriesListModel> seriesList = selectedSeriesWatchListModel!.results;
     seriesList.add(series);
-    selectedSeriesWatchListModel = selectedSeriesWatchListModel!.copyWith(results: seriesList);
+    selectedSeriesWatchListModel =
+        selectedSeriesWatchListModel!.copyWith(results: seriesList);
 
     var snapshot = await db
         .collection("users")
@@ -76,5 +98,25 @@ class SeriesWatchListProvider extends ChangeNotifier{
         .doc(selectedSeriesWatchListModel!.name)
         .set(selectedSeriesWatchListModel!.toJson());
     fetchWatchListLists();
+  }
+
+  Future<void> createBatchSeriesWatchList() async {
+    debugPrint("createBatchSeriesWatchList: Committing batch");
+    var batch = db.batch();
+    final User? user = firebaseAuth.currentUser;
+
+    for (var val in SeriesWatchLists.values) {
+      String value = DataUtils.getSeriesWatchlistStringFromEnum(val);
+      selectedSeriesWatchListModel =
+          TmdbTvResponseModel(results: [], name: value, uuid: uuid.v4());
+      batch.set(
+          db
+              .collection("users")
+              .doc(user?.email)
+              .collection("series-watchlists")
+              .doc(selectedSeriesWatchListModel!.name),
+          selectedSeriesWatchListModel!.toJson());
+    }
+    await batch.commit();
   }
 }
