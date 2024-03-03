@@ -6,13 +6,14 @@ import 'package:my_collection/utils/routes/route_names.dart';
 import 'package:my_collection/view/books/book_search_delegate.dart';
 import 'package:my_collection/view/widgets/common_network_image.dart';
 import 'package:my_collection/view/widgets/placeholders/placeholder.dart';
+import 'package:my_collection/view/widgets/search_widget_container.dart';
 import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-class BooksScreen extends StatelessWidget {
-  const BooksScreen({Key? key}) : super(key: key);
+class BooksHomeScreen extends StatelessWidget {
+  const BooksHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,37 +82,14 @@ class BooksScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  InkWell(
-                    onTap: (){
-                      showSearch(
-                        context: context,
-                        delegate: BookSearchDelegate(buildContext: context),
-                      );
-                    },
-                    child: Container(
-                      height: 64,
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).primaryColor),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Search",
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w900,
-                                      color:
-                                      Theme.of(context).primaryColorLight)),
-                              Icon(Icons.search,
-                                  color: Theme.of(context).primaryColorLight)
-                            ],
-                          )),
-                    ),
-                  ),
+                  SearchWidgetContainer(
+                      hintText: "Search",
+                      onTap: () {
+                        showSearch(
+                          context: context,
+                          delegate: BookSearchDelegate(buildContext: context),
+                        );
+                      }),
                   const SizedBox(height: 16.0),
                   HorizontalBookPosterListViewSection(
                       bookList: provider.booksOnSelfImprovement,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_collection/res/assets.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
-import 'package:my_collection/view/books/books_screen.dart';
-import 'package:my_collection/view/movies/movies_screen.dart';
-import 'package:my_collection/view/music/music_screen.dart';
-import 'package:my_collection/view/series/series_screen.dart';
+import 'package:my_collection/view/books/books_home_screen.dart';
+import 'package:my_collection/view/movies/movies_home_screen.dart';
+import 'package:my_collection/view/music/music_home_screen.dart';
+import 'package:my_collection/view/series/series_home_screen.dart';
 import 'package:my_collection/viewmodel/auth_provider.dart';
 import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
@@ -92,10 +92,10 @@ class HomeScreen extends StatelessWidget {
           return IndexedStack(
             index: provider.selectedIndex,
             children: const [
-              BooksScreen(),
-              MoviesScreen(),
-              SeriesScreen(),
-              MusicScreen()
+              BooksHomeScreen(),
+              MoviesHomeScreen(),
+              SeriesHomeScreen(),
+              MusicHomeScreen()
             ],
           );
         }),
@@ -111,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                 showSelectedLabels: false,
                 selectedLabelStyle: const TextStyle(fontSize: 8.0),
                 currentIndex: provider.selectedIndex,
-                onTap: (_) => provider.onBottomNavIndexChanged(_, context),
+                onTap: (_) => provider.onBottomNavIndexChanged(_, provider.selectedIndex, context),
                 items: [
                   BottomNavigationBarItem(
                       icon: Column(
