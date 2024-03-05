@@ -1,11 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:my_collection/domain/i_books_repository.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
-import 'package:my_collection/repository/books_repository.dart';
 
 class BooksProvider extends ChangeNotifier {
-  BooksRepository booksRepository = BooksRepository();
+  final IBooksRepository booksRepository;
+  BooksProvider({required this.booksRepository});
 
   Map<String,List<BookListItem>> bookDataMap = {};
   List<BookListItem> booksOnSelfImprovement = List.empty(growable: true);

@@ -40,6 +40,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: 8.0.0
+  get_it: 7.6.0
   google_sign_in: 6.1.5
   jiffy: 6.0.0
   path: 1.8.2
