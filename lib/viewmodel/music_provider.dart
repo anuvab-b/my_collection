@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_collection/domain/i_music_repository.dart';
 import 'package:my_collection/models/music/artists/spotify_artist_albums.dart';
 import 'package:my_collection/models/music/artists/spotify_artist_details.dart';
 import 'package:my_collection/models/music/artists/spotify_artist_related_artists.dart';
@@ -10,14 +11,14 @@ import 'package:my_collection/repository/music_repository.dart';
 import 'package:my_collection/utils/data_utils.dart';
 
 class MusicProvider extends ChangeNotifier {
+  final IMusicRepository musicRepository;
   late FirebaseFirestore db;
   String searchQuery = "";
-  MusicProvider() {
+
+  MusicProvider({required this.musicRepository}) {
     db = FirebaseFirestore.instance;
     textEditingController = TextEditingController();
   }
-
-  MusicRepository musicRepository = MusicRepository();
 
   bool isSearchLoading = false;
   bool isArtistDetailsLoading = false;

@@ -1,12 +1,14 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_collection/domain/i_series_repository.dart';
 import 'package:my_collection/models/tv/tmdb_tv_agg_credits_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_details_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
-import 'package:my_collection/repository/tv/series_repository.dart';
 
 class SeriesProvider extends ChangeNotifier{
-  SeriesRepository seriesRepository = SeriesRepository();
+
+  ISeriesRepository seriesRepository;
+  SeriesProvider({required this.seriesRepository});
 
 
   List<SeriesListModel> airingTodaySeriesList = List.empty(growable: true);
