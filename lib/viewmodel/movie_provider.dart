@@ -1,13 +1,60 @@
+import 'dart:async';
+import 'dart:isolate';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:my_collection/domain/i_movie_repository.dart';
 import 'package:my_collection/models/movies/tmdb_movie_credits_response_model.dart';
 import 'package:my_collection/models/movies/tmdb_movie_details_response_model.dart';
 import 'package:my_collection/models/movies/tmdb_movie_response_model.dart';
-import 'package:my_collection/repository/movies/movie_repository.dart';
+
+Future<void> getNowPlayingIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final movieRepository = args[2] as IMovieRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await movieRepository.fetchNowPlayingMovies();
+  sendPort.send(result);
+}
+
+Future<void> getPopularIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final movieRepository = args[2] as IMovieRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await movieRepository.fetchPopularMovies();
+  sendPort.send(result);
+}
+
+Future<void> getUpcomingIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final movieRepository = args[2] as IMovieRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await movieRepository.fetchUpcomingMovies();
+  sendPort.send(result);
+}
+
+Future<void> getTopRatedIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final movieRepository = args[2] as IMovieRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await movieRepository.fetchTopRatedMovies();
+  sendPort.send(result);
+}
 
 class MovieProvider extends ChangeNotifier{
-
-  MovieRepository movieRepository = MovieRepository();
+  final IMovieRepository movieRepository;
+  MovieProvider({required this.movieRepository});
 
 
   List<MovieListModel> upcomingMovieList = List.empty(growable: true);
@@ -49,48 +96,94 @@ class MovieProvider extends ChangeNotifier{
   Future<void> getUpcomingMovies() async {
     isUpcomingLoading = true;
     notifyListeners();
-    var result = await movieRepository.fetchUpcomingMovies();
-    isUpcomingLoading = false;
-    result.fold((l){}, (r){
-      upcomingMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
-    });
-    notifyListeners();
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getUpcomingIsolate, [rootIsolateToken,receivePort.sendPort,movieRepository]);
 
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        upcomingMovieList = r.results;
+        debugPrint("Went in right");
+      });
+      isUpcomingLoading = false;
+      notifyListeners();
+    });
   }
 
   Future<void> getPopularMovies() async {
     isPopularLoading = true;
     notifyListeners();
-    var result = await movieRepository.fetchPopularMovies();
-    isPopularLoading = false;
-    result.fold((l){}, (r){
-      popularMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getPopularIsolate, [rootIsolateToken,receivePort.sendPort,movieRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        popularMovieList = r.results;
+        debugPrint("Went in right");
+      });
+      isPopularLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
 
   }
 
   Future<void> getNowPlayingMovies() async {
     isNowPlayingLoading = true;
     notifyListeners();
-    var result = await movieRepository.fetchNowPlayingMovies();
-    isNowPlayingLoading = false;
-    result.fold((l){}, (r){
-      nowPlayingMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
-    });
-    notifyListeners();
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getNowPlayingIsolate, [rootIsolateToken,receivePort.sendPort,movieRepository]);
 
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        nowPlayingMovieList = r.results;
+        debugPrint("Went in right");
+      });
+      isNowPlayingLoading = false;
+      notifyListeners();
+    });
   }
 
   Future<void> getTopRatedMovies() async {
     isTopRatedLoading = true;
     notifyListeners();
-    var result = await movieRepository.fetchTopRatedMovies();
-    isTopRatedLoading = false;
-    result.fold((l){}, (r){
-      topRatedMovieList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getTopRatedIsolate, [rootIsolateToken,receivePort.sendPort,movieRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        topRatedMovieList = r.results;
+        debugPrint("Went in right");
+      });
+      isTopRatedLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   storeIndex(int value){
