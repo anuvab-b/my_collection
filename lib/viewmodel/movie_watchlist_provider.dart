@@ -25,18 +25,13 @@ class MovieWatchListProvider extends ChangeNotifier{
     uuid = const Uuid();
   }
 
-  void setSelectedMovieWatchListIndex(int index) {
-    selectedMovieWatchListIndex = index;
+  setSelectedMovieWatchListItem(TmdbMovieResponseModel item){
+    selectedMovieWatchListModel = item;
     notifyListeners();
   }
 
   Future<void> fetchMovieWatchlistLists() async {
     final User? user = firebaseAuth.currentUser;
-
-    List<String> movieWatchlistNames = [];
-    for(var val in MovieWatchLists.values) {
-      movieWatchlistNames.add(DataUtils.getMovieWatchlistStringFromEnum(val));
-    }
 
     isLoadingMovieWatchLists = true;
     notifyListeners();
@@ -53,16 +48,6 @@ class MovieWatchListProvider extends ChangeNotifier{
 
     isLoadingMovieWatchLists = false;
     movieWatchLists = snapshot.docs.map((e) => TmdbMovieResponseModel.fromJson(e.data())).toList();
-
-    for(TmdbMovieResponseModel i in movieWatchLists){
-      if(movieWatchlistNames.contains(i?.name)){
-        continue;
-      }
-      else{
-        createBatchMovieWatchList();
-        break;
-      }
-    }
 
     notifyListeners();
   }
@@ -81,6 +66,20 @@ class MovieWatchListProvider extends ChangeNotifier{
         .doc(selectedMovieWatchListModel!.name)
         .set(selectedMovieWatchListModel!.toJson());
 
+    List<String> movieWatchlistNames = [];
+    for(var val in MovieWatchLists.values) {
+      movieWatchlistNames.add(DataUtils.getMovieWatchlistStringFromEnum(val));
+    }
+
+    for(TmdbMovieResponseModel i in movieWatchLists){
+      if(movieWatchlistNames.contains(i?.name)){
+        continue;
+      }
+      else{
+        createBatchMovieWatchList();
+        break;
+      }
+    }
     fetchMovieWatchlistLists();
   }
 
