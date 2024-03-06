@@ -25,18 +25,14 @@ class SeriesWatchListProvider extends ChangeNotifier {
     uuid = const Uuid();
   }
 
-  void setSelectedWatchListIndex(int index) {
-    selectedSeriesWatchListIndex = index;
+  void setSelectedWatchListModel(TmdbTvResponseModel model) {
+    selectedSeriesWatchListModel = model;
     notifyListeners();
   }
 
   Future<void> fetchWatchListLists() async {
     final User? user = firebaseAuth.currentUser;
 
-    List<String> seriesWatchlistNames = [];
-    for (var val in SeriesWatchLists.values) {
-      seriesWatchlistNames.add(DataUtils.getSeriesWatchlistStringFromEnum(val));
-    }
     isLoadingSeriesWatchLists = true;
     notifyListeners();
 
@@ -55,20 +51,12 @@ class SeriesWatchListProvider extends ChangeNotifier {
         .map((e) => TmdbTvResponseModel.fromJson(e.data()))
         .toList();
 
-    for (TmdbTvResponseModel i in seriesWatchLists) {
-      if (seriesWatchlistNames.contains(i?.name)) {
-        continue;
-      } else {
-        createBatchSeriesWatchList();
-        break;
-      }
-    }
-
     notifyListeners();
   }
 
   Future<void> createNewSeriesWatchList() async {
     final User? user = firebaseAuth.currentUser;
+
     selectedSeriesWatchListModel = TmdbTvResponseModel(
         results: [],
         name: seriesWatchListNameTextController.text,
@@ -80,6 +68,18 @@ class SeriesWatchListProvider extends ChangeNotifier {
         .doc(selectedSeriesWatchListModel!.name)
         .set(selectedSeriesWatchListModel!.toJson());
 
+    List<String> seriesWatchlistNames = [];
+    for (var val in SeriesWatchLists.values) {
+      seriesWatchlistNames.add(DataUtils.getSeriesWatchlistStringFromEnum(val));
+    }
+    for (TmdbTvResponseModel i in seriesWatchLists) {
+      if (seriesWatchlistNames.contains(i?.name)) {
+        continue;
+      } else {
+        createBatchSeriesWatchList();
+        break;
+      }
+    }
     fetchWatchListLists();
   }
 

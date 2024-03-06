@@ -15,10 +15,10 @@ class SeriesDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SeriesProvider>(builder: (context, provider, child) {
-      SeriesListModel? series = provider?.selectedSeriesListModel;
+      SeriesListModel? series = provider.selectedSeriesListModel;
       return Scaffold(
         appBar: AppBar(
-          title: Text("Movie Details",
+          title: Text("Series Details",
               style: TextStyle(
                   fontFamily: "Poppins",
                   color: Theme.of(context).primaryColorLight)),
@@ -283,13 +283,14 @@ class SeriesDetailsScreen extends StatelessWidget {
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: [
-                                            const Text("Add to a Movie Watchlist",
+                                            const Text("Add to a Series Watchlist",
                                                 style: TextStyle(
                                                     fontFamily: "Poppins",
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 24)),
                                             Expanded(child: SeriesWatchListListView(
                                                 onTap: (_) async {
+                                                  provider.setSelectedWatchListModel(provider.seriesWatchLists[_]);
                                                   showDialog(
                                                       context: context,
                                                       barrierDismissible: false,
@@ -320,7 +321,7 @@ class SeriesDetailsScreen extends StatelessWidget {
                           backgroundColor: Colors.white,
                           foregroundColor: Theme.of(context).primaryColorDark),
                       child: const Text(
-                        "Add to your Movie Collection",
+                        "Add to your Series Collection",
                         style: TextStyle(
                             fontSize: 16,
                             fontFamily: "Poppins",
