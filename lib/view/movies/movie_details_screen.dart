@@ -293,6 +293,9 @@ class MovieDetailsScreen extends StatelessWidget {
                                                 fontSize: 24)),
                                         Expanded(child: MovieWatchListListView(
                                             onTap: (_) async {
+                                          provider
+                                              .setSelectedMovieWatchListItem(
+                                                  provider.movieWatchLists[_]);
                                           showDialog(
                                               context: context,
                                               barrierDismissible: false,
