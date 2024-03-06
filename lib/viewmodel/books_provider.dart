@@ -1,8 +1,62 @@
+import 'dart:isolate';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_collection/domain/i_books_repository.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
+
+Future<void> getSelfImprovementIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final booksRepository = args[2] as IBooksRepository;
+  final String bookCategory = args[3] as String;
+  final String bookOrderBy = args[4] as String;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await booksRepository.fetchBooksByQuery(bookCategory,orderBy: bookOrderBy);
+  sendPort.send(result);
+}
+
+Future<void> getFinanceIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final booksRepository = args[2] as IBooksRepository;
+  final String bookCategory = args[3] as String;
+  final String bookOrderBy = args[4] as String;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await booksRepository.fetchBooksByQuery(bookCategory,orderBy: bookOrderBy);
+  sendPort.send(result);
+}
+
+Future<void> getPsychologyIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final booksRepository = args[2] as IBooksRepository;
+  final String bookCategory = args[3] as String;
+  final String bookOrderBy = args[4] as String;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await booksRepository.fetchBooksByQuery(bookCategory,orderBy: bookOrderBy);
+  sendPort.send(result);
+}
+
+Future<void> getCrimeIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final booksRepository = args[2] as IBooksRepository;
+  final String bookCategory = args[3] as String;
+  final String bookOrderBy = args[4] as String;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await booksRepository.fetchBooksByQuery(bookCategory,orderBy: bookOrderBy);
+  sendPort.send(result);
+}
 
 class BooksProvider extends ChangeNotifier {
   final IBooksRepository booksRepository;
@@ -45,15 +99,28 @@ class BooksProvider extends ChangeNotifier {
     else {
       isSelfImpLoading = true;
       notifyListeners();
-      var result = await booksRepository.fetchBooksByQuery(bookCategory,
-          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-      isSelfImpLoading = false;
-      result.fold((l) {}, (r) {
-        booksOnSelfImprovement = r.items;
-        bookDataMap.putIfAbsent(bookCategory, () => booksOnSelfImprovement);
+
+      RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+      if(rootIsolateToken == null){
+        debugPrint("Cannot get the Root Isolate Token");
+        return;
+      }
+      ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(getSelfImprovementIsolate, [rootIsolateToken,receivePort.sendPort,booksRepository,bookCategory,DataUtils.getBookFilterStringFromEnum(filterCategory)]);
+
+      receivePort.listen((message) {
+        message.fold((l){
+          debugPrint("Went in left");
+        },(r){
+          booksOnSelfImprovement = r.items;
+          bookDataMap.putIfAbsent(bookCategory, () => booksOnSelfImprovement);
+          debugPrint("Went in right");
+        });
+        isSelfImpLoading = false;
+        notifyListeners();
       });
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> getBooksOnFinance() async {
@@ -65,14 +132,25 @@ class BooksProvider extends ChangeNotifier {
     else {
       isFinanceLoading = true;
       notifyListeners();
-      var result = await booksRepository.fetchBooksByQuery(
-          bookCategory,
-          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-      isFinanceLoading = false;
-      result.fold((l) {}, (r) {
-        booksOnFinance = r.items;
-        bookDataMap.putIfAbsent(bookCategory, () => booksOnFinance);
 
+      RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+      if(rootIsolateToken == null){
+        debugPrint("Cannot get the Root Isolate Token");
+        return;
+      }
+      ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(getFinanceIsolate, [rootIsolateToken,receivePort.sendPort,booksRepository,bookCategory,DataUtils.getBookFilterStringFromEnum(filterCategory)]);
+
+      receivePort.listen((message) {
+        message.fold((l){
+          debugPrint("Went in left");
+        },(r){
+          booksOnFinance = r.items;
+          bookDataMap.putIfAbsent(bookCategory, () => booksOnFinance);
+          debugPrint("Went in right");
+        });
+        isFinanceLoading = false;
+        notifyListeners();
       });
     }
     notifyListeners();
@@ -88,13 +166,25 @@ class BooksProvider extends ChangeNotifier {
     else {
       isPsychologyLoading = true;
       notifyListeners();
-      var result = await booksRepository.fetchBooksByQuery(
-          bookCategory,
-          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-      isPsychologyLoading = false;
-      result.fold((l) {}, (r) {
-        booksOnPsychology = r.items;
-        bookDataMap.putIfAbsent(bookCategory, () => booksOnPsychology);
+
+      RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+      if(rootIsolateToken == null){
+        debugPrint("Cannot get the Root Isolate Token");
+        return;
+      }
+      ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(getPsychologyIsolate, [rootIsolateToken,receivePort.sendPort,booksRepository,bookCategory,DataUtils.getBookFilterStringFromEnum(filterCategory)]);
+
+      receivePort.listen((message) {
+        message.fold((l){
+          debugPrint("Went in left");
+        },(r){
+          booksOnPsychology = r.items;
+          bookDataMap.putIfAbsent(bookCategory, () => booksOnPsychology);
+          debugPrint("Went in right");
+        });
+        isPsychologyLoading = false;
+        notifyListeners();
       });
     }
     notifyListeners();
@@ -109,13 +199,25 @@ class BooksProvider extends ChangeNotifier {
     else {
       isCrimeLoading = true;
       notifyListeners();
-      var result = await booksRepository.fetchBooksByQuery(
-          bookCategory,
-          orderBy: DataUtils.getBookFilterStringFromEnum(filterCategory));
-      isCrimeLoading = false;
-      result.fold((l) {}, (r) {
-        booksOnCrime = r.items;
-        bookDataMap.putIfAbsent(bookCategory, () => booksOnCrime);
+
+      RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+      if(rootIsolateToken == null){
+        debugPrint("Cannot get the Root Isolate Token");
+        return;
+      }
+      ReceivePort receivePort = ReceivePort();
+      await Isolate.spawn(getCrimeIsolate, [rootIsolateToken,receivePort.sendPort,booksRepository,bookCategory,DataUtils.getBookFilterStringFromEnum(filterCategory)]);
+
+      receivePort.listen((message) {
+        message.fold((l){
+          debugPrint("Went in left");
+        },(r){
+          booksOnCrime = r.items;
+          bookDataMap.putIfAbsent(bookCategory, () => booksOnCrime);
+          debugPrint("Went in right");
+        });
+        isCrimeLoading = false;
+        notifyListeners();
       });
     }
     notifyListeners();
