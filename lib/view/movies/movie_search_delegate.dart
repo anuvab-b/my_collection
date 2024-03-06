@@ -97,8 +97,9 @@ class MovieSearchDelegate extends SearchDelegate {
                               MovieListModel movieListModel =
                                   searchResponseModel!.results[index];
                               return InkWell(
-                                onTap: (){
-                                  provider.setSelectedMovieListItem(movieListModel);
+                                onTap: () {
+                                  provider
+                                      .setSelectedMovieListItem(movieListModel);
                                   provider.fetchMovieCredits();
                                   provider.fetchMovieDetails();
                                   Navigator.pushNamed(
@@ -122,8 +123,8 @@ class MovieSearchDelegate extends SearchDelegate {
                                                           BorderRadius.circular(
                                                               8),
                                                       child: CachedNetworkImage(
-                                                        errorWidget:
-                                                            (context, value, value2) {
+                                                        errorWidget: (context,
+                                                            value, value2) {
                                                           return const CommonPlaceholderNetworkImage();
                                                         },
                                                         fit: BoxFit.fill,
@@ -136,8 +137,8 @@ class MovieSearchDelegate extends SearchDelegate {
                                                             color: Theme.of(
                                                                     context)
                                                                 .primaryColorLight,
-                                                            value:
-                                                                progress.progress,
+                                                            value: progress
+                                                                .progress,
                                                           ),
                                                         ),
                                                         imageUrl:
@@ -148,10 +149,12 @@ class MovieSearchDelegate extends SearchDelegate {
                                                 Flexible(
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Text(
-                                                          movieListModel?.title ??
+                                                          movieListModel
+                                                                  ?.title ??
                                                               "",
                                                           maxLines: 1,
                                                           overflow:
@@ -161,7 +164,8 @@ class MovieSearchDelegate extends SearchDelegate {
                                                                   "Poppins",
                                                               fontSize: 16,
                                                               fontWeight:
-                                                                  FontWeight.w600,
+                                                                  FontWeight
+                                                                      .w600,
                                                               color: Theme.of(
                                                                       context)
                                                                   .highlightColor)),
@@ -171,7 +175,8 @@ class MovieSearchDelegate extends SearchDelegate {
                                                                 .end,
                                                         children: [
                                                           const Icon(
-                                                              Icons.star_rounded,
+                                                              Icons
+                                                                  .star_rounded,
                                                               color:
                                                                   Colors.amber),
                                                           const SizedBox(
@@ -199,36 +204,44 @@ class MovieSearchDelegate extends SearchDelegate {
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(height: 4.0),
-                                                      if(movieListModel.releaseDate?.year!=null)
-                                                      Container(
-                                                        padding:
-                                                            const EdgeInsets.all(
-                                                                2.0),
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(4.0),
-                                                          color: Theme.of(context)
-                                                              .primaryColor,
+                                                      const SizedBox(
+                                                          height: 4.0),
+                                                      if (movieListModel
+                                                              .releaseDate
+                                                              ?.year !=
+                                                          null)
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        4.0),
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                          ),
+                                                          child: Text(
+                                                            "${movieListModel.releaseDate?.year}",
+                                                            maxLines: 1,
+                                                            style: TextStyle(
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColorLight,
+                                                                fontSize: 12.0,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
                                                         ),
-                                                        child: Text(
-                                                          "${movieListModel.releaseDate?.year}",
-                                                          maxLines: 1,
-                                                          style: TextStyle(
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColorLight,
-                                                              fontSize: 12.0,
-                                                              fontWeight:
-                                                                  FontWeight.w600,
-                                                              fontFamily:
-                                                                  "Poppins"),
-                                                        ),
-                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -236,11 +249,13 @@ class MovieSearchDelegate extends SearchDelegate {
                                             ),
                                           ),
                                           InkWell(
-                                              child: const Icon(Icons.more_vert),
+                                              child:
+                                                  const Icon(Icons.more_vert),
                                               onTap: () {
                                                 showModalBottomSheet(
                                                     // Set this when inner content overflows, making RoundedRectangleBorder not working as expected
-                                                    clipBehavior: Clip.antiAlias,
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
                                                     // Set shape to make top corners rounded
                                                     shape:
                                                         const RoundedRectangleBorder(
@@ -268,9 +283,9 @@ class MovieSearchDelegate extends SearchDelegate {
                                                                         16.0,
                                                                     vertical:
                                                                         16.0),
-                                                            color:
-                                                                Theme.of(context)
-                                                                    .primaryColor,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
                                                             child: Column(
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
@@ -290,6 +305,9 @@ class MovieSearchDelegate extends SearchDelegate {
                                                                     MovieWatchListListView(
                                                                         onTap:
                                                                             (_) async {
+                                                                  provider.setSelectedMovieWatchListItem(
+                                                                      provider
+                                                                          .movieWatchLists[_]);
                                                                   showDialog(
                                                                       context:
                                                                           context,
