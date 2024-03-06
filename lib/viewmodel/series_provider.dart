@@ -1,10 +1,55 @@
+import 'dart:isolate';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:my_collection/domain/i_series_repository.dart';
 import 'package:my_collection/models/tv/tmdb_tv_agg_credits_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_details_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_response_model.dart';
 
+Future<void> getAiringTodayIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final seriesRepository = args[2] as ISeriesRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await seriesRepository.fetchAiringToday();
+  sendPort.send(result);
+}
+
+Future<void> getOnTheAirIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final seriesRepository = args[2] as ISeriesRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await seriesRepository.fetchOnTheAir();
+  sendPort.send(result);
+}
+
+Future<void> getPopularIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final seriesRepository = args[2] as ISeriesRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await seriesRepository.fetchPopular();
+  sendPort.send(result);
+}
+
+Future<void> getTopRatedIsolate(List<Object> args) async {
+  final rootIsolateToken = args[0] as RootIsolateToken;
+  final sendPort = args[1] as SendPort;
+  final seriesRepository = args[2] as ISeriesRepository;
+
+  BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+
+  var result = await seriesRepository.fetchTopRatedSeries();
+  sendPort.send(result);
+}
 class SeriesProvider extends ChangeNotifier{
 
   ISeriesRepository seriesRepository;
@@ -45,48 +90,106 @@ class SeriesProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void fetchSeriesHomeData(){
+    getAiringToday();
+    getOnTheAir();
+    getPopular();
+    getTopRated();
+  }
+
   Future<void> getAiringToday() async {
     isAiringTodayLoading = true;
     notifyListeners();
-    var result = await seriesRepository.fetchAiringToday();
-    isAiringTodayLoading = false;
-    result.fold((l){}, (r){
-      airingTodaySeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getAiringTodayIsolate, [rootIsolateToken,receivePort.sendPort,seriesRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        airingTodaySeriesList = r.results;
+        debugPrint("Went in right");
+      });
+      isNowPlayingLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   Future<void> getOnTheAir() async {
     isOnTheAirLoading = true;
     notifyListeners();
-    var result = await seriesRepository.fetchOnTheAir();
-    isOnTheAirLoading = false;
-    result.fold((l){}, (r){
-      onTheAirSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getOnTheAirIsolate, [rootIsolateToken,receivePort.sendPort,seriesRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        onTheAirSeriesList = r.results;
+        debugPrint("Went in right");
+      });
+      isOnTheAirLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   Future<void> getPopular() async {
-    isNowPlayingLoading = true;
+    isPopularLoading = true;
     notifyListeners();
-    var result = await seriesRepository.fetchPopular();
-    isNowPlayingLoading = false;
-    result.fold((l){}, (r){
-      popularSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getPopularIsolate, [rootIsolateToken,receivePort.sendPort,seriesRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        popularSeriesList = r.results;
+        debugPrint("Went in right");
+      });
+      isPopularLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   Future<void> getTopRated() async {
     isTopRatedLoading = true;
     notifyListeners();
-    var result = await seriesRepository.fetchTopRatedSeries();
-    isTopRatedLoading = false;
-    result.fold((l){}, (r){
-      topRatedSeriesList = r.results.length > 3 ? r.results.sublist(0,3):r.results;
+
+    RootIsolateToken? rootIsolateToken = RootIsolateToken.instance;
+    if(rootIsolateToken == null){
+      debugPrint("Cannot get the Root Isolate Token");
+      return;
+    }
+    ReceivePort receivePort = ReceivePort();
+    await Isolate.spawn(getTopRatedIsolate, [rootIsolateToken,receivePort.sendPort,seriesRepository]);
+
+    receivePort.listen((message) {
+      message.fold((l){
+        debugPrint("Went in left");
+      },(r){
+        topRatedSeriesList = r.results;
+        debugPrint("Went in right");
+      });
+      isTopRatedLoading = false;
+      notifyListeners();
     });
-    notifyListeners();
   }
 
   storeIndex(int value){
