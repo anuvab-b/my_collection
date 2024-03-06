@@ -45,33 +45,29 @@ class GoogleBooksApiResponseModel {
 class BookListItem {
   String kind;
   String id;
-  String etag;
+  String? etag;
   String selfLink;
   VolumeInfo volumeInfo;
-  SaleInfo saleInfo;
-  AccessInfo accessInfo;
+  SaleInfo? saleInfo;
+  AccessInfo? accessInfo;
   SearchInfo? searchInfo;
 
   BookListItem({
     required this.kind,
     required this.id,
-    required this.etag,
+    this.etag,
     required this.selfLink,
     required this.volumeInfo,
-    required this.saleInfo,
-    required this.accessInfo,
+    this.saleInfo,
+    this.accessInfo,
     this.searchInfo,
   });
 
   factory BookListItem.fromJson(Map<String, dynamic> json) => BookListItem(
     kind: json["kind"],
     id: json["id"],
-    etag: json["etag"],
     selfLink: json["selfLink"],
     volumeInfo: VolumeInfo.fromJson(json["volumeInfo"]),
-    saleInfo: SaleInfo.fromJson(json["saleInfo"]),
-    accessInfo: AccessInfo.fromJson(json["accessInfo"]),
-    searchInfo: json["searchInfo"] == null ? null : SearchInfo.fromJson(json["searchInfo"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -246,15 +242,15 @@ class VolumeInfo {
     pageCount: json["pageCount"],
     printType: json["printType"],
     maturityRating: json["maturityRating"],
-    allowAnonLogging: json["allowAnonLogging"],
-    contentVersion: json["contentVersion"],
+    allowAnonLogging: json["allowAnonLogging"] ?? false,
+    contentVersion: json["contentVersion"] ?? "",
     imageLinks: json["imageLinks"] == null ? null : ImageLinks.fromJson(json["imageLinks"]),
-    language: json["language"],
-    previewLink: json["previewLink"],
-    infoLink: json["infoLink"],
-    canonicalVolumeLink: json["canonicalVolumeLink"],
-    averageRating: json["averageRating"],
-    ratingsCount: json["ratingsCount"],
+    language: json["language"]  ?? "",
+    previewLink: json["previewLink"] ?? "",
+    infoLink: json["infoLink"] ?? "",
+    canonicalVolumeLink: json["canonicalVolumeLink"] ?? "",
+    averageRating: json["averageRating"] ?? 0.0,
+    ratingsCount: json["ratingsCount"] ?? 0,
     panelizationSummary: json["panelizationSummary"] == null ? null : PanelizationSummary.fromJson(json["panelizationSummary"]),
   );
 
