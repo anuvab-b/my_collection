@@ -115,7 +115,7 @@ class SeriesProvider extends ChangeNotifier{
         airingTodaySeriesList = r.results;
         debugPrint("Went in right");
       });
-      isNowPlayingLoading = false;
+      isAiringTodayLoading = false;
       notifyListeners();
     });
   }

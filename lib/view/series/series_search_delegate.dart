@@ -243,7 +243,7 @@ class SeriesSearchDelegate extends SearchDelegate {
                                                                   .start,
                                                           children: [
                                                             const Text(
-                                                                "Add to a Playlist",
+                                                                "Add to your Series Collection",
                                                                 style: TextStyle(
                                                                     fontFamily:
                                                                         "Poppins",
@@ -256,6 +256,9 @@ class SeriesSearchDelegate extends SearchDelegate {
                                                                 SeriesWatchListListView(
                                                                     onTap:
                                                                         (_) async {
+                                                              provider.setSelectedWatchListModel(
+                                                                  provider
+                                                                      .seriesWatchLists[_]);
                                                               showDialog(
                                                                   context:
                                                                       context,
