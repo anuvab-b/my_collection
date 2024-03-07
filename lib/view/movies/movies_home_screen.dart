@@ -180,133 +180,137 @@ class HorizontalMoviePosterListViewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            sectionHeader ?? "",
-            style: TextStyle(
-                color: Theme.of(context).primaryColorLight,
-                fontSize: 24.0,
-                fontWeight: FontWeight.w900,
-                fontFamily: "Poppins"),
-          ),
-          const SizedBox(height: 8.0),
-          SizedBox(
-            height: 260,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                itemCount: movieList.length,
-                itemBuilder: (ctx, index) {
-                  MovieListModel movie = movieList[index];
-                  return InkWell(
-                    onTap: () {
-                      MovieProvider provider =
-                          Provider.of<MovieProvider>(context, listen: false);
-                      provider.setSelectedMovieListItem(movie);
-                      provider.fetchMovieCredits();
-                      provider.fetchMovieDetails();
-                      Navigator.pushNamed(
-                          context, RouteNames.movieDetailsScreen);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
-                      width: 180,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                              height: 180,
-                              width: 180,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8),
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                  progressIndicatorBuilder:
-                                      (context, url, progress) => Center(
-                                    child: CircularProgressIndicator(
-                                      value: progress.progress,
-                                    ),
-                                  ),
-                                  imageUrl:
-                                      "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
-                                ),
-                              )),
-                          const SizedBox(height: 4.0),
-                          Text(
-                            movie.title ?? "",
-                            maxLines: 1,
-                            style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: Theme.of(context).primaryColorLight,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w300,
-                                fontFamily: "Poppins"),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return movieList.isEmpty
+        ? const SizedBox()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                sectionHeader ?? "",
+                style: TextStyle(
+                    color: Theme.of(context).primaryColorLight,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: "Poppins"),
+              ),
+              const SizedBox(height: 8.0),
+              SizedBox(
+                height: 260,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: movieList.length,
+                    itemBuilder: (ctx, index) {
+                      MovieListModel movie = movieList[index];
+                      return InkWell(
+                        onTap: () {
+                          MovieProvider provider = Provider.of<MovieProvider>(
+                              context,
+                              listen: false);
+                          provider.setSelectedMovieListItem(movie);
+                          provider.fetchMovieCredits();
+                          provider.fetchMovieDetails();
+                          Navigator.pushNamed(
+                              context, RouteNames.movieDetailsScreen);
+                        },
+                        child: Container(
+                          margin:
+                              const EdgeInsets.fromLTRB(12.0, 4.0, 0.0, 4.0),
+                          width: 180,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              SizedBox(
+                                  height: 180,
+                                  width: 180,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.fill,
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) => Center(
+                                        child: CircularProgressIndicator(
+                                          value: progress.progress,
+                                        ),
+                                      ),
+                                      imageUrl:
+                                          "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
+                                    ),
+                                  )),
+                              const SizedBox(height: 4.0),
+                              Text(
+                                movie.title ?? "",
+                                maxLines: 1,
+                                style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Theme.of(context).primaryColorLight,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w300,
+                                    fontFamily: "Poppins"),
+                              ),
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Icon(Icons.star_rounded,
-                                      color: Colors.amber),
-                                  const SizedBox(width: 2.0),
-                                  Text(
-                                    movie.voteAverage?.toStringAsFixed(1) ?? "",
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color:
-                                            Theme.of(context).primaryColorLight,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: "Poppins"),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Icon(Icons.star_rounded,
+                                          color: Colors.amber),
+                                      const SizedBox(width: 2.0),
+                                      Text(
+                                        movie.voteAverage?.toStringAsFixed(1) ??
+                                            "",
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Theme.of(context)
+                                                .primaryColorLight,
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: "Poppins"),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(2.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Text(
+                                      "${movie.releaseDate?.year ?? ""}",
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Theme.of(context)
+                                              .primaryColorLight,
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: "Poppins"),
+                                    ),
                                   ),
                                 ],
                               ),
-                              Container(
-                                padding: const EdgeInsets.all(2.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                child: Text(
-                                  "${movie.releaseDate?.year ?? ""}",
-                                  maxLines: 1,
-                                  style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color:
-                                          Theme.of(context).primaryColorLight,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Poppins"),
-                                ),
-                              ),
+                              // Row(
+                              //     mainAxisAlignment: MainAxisAlignment.end,
+                              //     children: [
+                              //       IconButton(
+                              //           iconSize: 16.0,
+                              //           onPressed: () {},
+                              //           icon: const Icon(CupertinoIcons.heart)),
+                              //       IconButton(
+                              //           iconSize: 16.0,
+                              //           onPressed: () {},
+                              //           icon: const Icon(CupertinoIcons.bookmark))
+                              //     ])
                             ],
                           ),
-                          // Row(
-                          //     mainAxisAlignment: MainAxisAlignment.end,
-                          //     children: [
-                          //       IconButton(
-                          //           iconSize: 16.0,
-                          //           onPressed: () {},
-                          //           icon: const Icon(CupertinoIcons.heart)),
-                          //       IconButton(
-                          //           iconSize: 16.0,
-                          //           onPressed: () {},
-                          //           icon: const Icon(CupertinoIcons.bookmark))
-                          //     ])
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-          ),
-        ],
-      ),
-    );
+                        ),
+                      );
+                    }),
+              ),
+            ],
+          );
   }
 }
