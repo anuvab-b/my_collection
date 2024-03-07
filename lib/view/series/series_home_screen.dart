@@ -267,7 +267,9 @@ class HorizontalSeriesPosterListViewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return seriesList.isEmpty
+        ? const SizedBox()
+        : Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
