@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_collection/models/books/google_books_api_response_model.dart';
 import 'package:my_collection/utils/data_utils.dart';
-import 'package:my_collection/viewmodel/books_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ReadingListProvider extends ChangeNotifier {
@@ -26,19 +25,8 @@ class ReadingListProvider extends ChangeNotifier {
     uuid = const Uuid();
   }
 
-  void setSelectedReadingListIndex(int index) {
-    selectedReadingListIndex = index;
-    notifyListeners();
-  }
-
   Future<void> fetchReadingLists() async {
     final User? user = firebaseAuth.currentUser;
-
-    List<String> bookShelveNames = [];
-    for(var val in BookShelves.values) {
-      bookShelveNames.add(DataUtils.getBookshelfStringFromEnum(val));
-    }
-
     isLoadingReadingLists = true;
     notifyListeners();
 
@@ -55,16 +43,11 @@ class ReadingListProvider extends ChangeNotifier {
     isLoadingReadingLists = false;
     readingLists = snapshot.docs.map((e) => GoogleBooksApiResponseModel.fromJson(e.data())).toList();
 
-    for(GoogleBooksApiResponseModel i in readingLists){
-      if(bookShelveNames.contains(i?.kind)){
-        continue;
-      }
-      else{
-        createBatchReadingList();
-        break;
-      }
-    }
+    notifyListeners();
+  }
 
+  void setSelectedReadingListModel(GoogleBooksApiResponseModel model) {
+    selectedReadingListModel = model;
     notifyListeners();
   }
 
@@ -77,6 +60,19 @@ class ReadingListProvider extends ChangeNotifier {
         .collection("reading-lists")
         .doc(selectedReadingListModel.kind)
         .set(selectedReadingListModel.toJson());
+
+    List<String> readingListNames = [];
+    for (var val in BookShelves.values){
+      readingListNames.add(DataUtils.getBookshelfStringFromEnum(val));
+    }
+    for (GoogleBooksApiResponseModel i in readingLists){
+      if(readingListNames.contains(i.kind)){
+        continue;
+      }
+      else{
+        createBatchReadingList();
+      }
+    }
 
     fetchReadingLists();
   }
