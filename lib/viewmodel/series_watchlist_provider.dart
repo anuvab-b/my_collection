@@ -68,6 +68,8 @@ class SeriesWatchListProvider extends ChangeNotifier {
         .doc(selectedSeriesWatchListModel!.name)
         .set(selectedSeriesWatchListModel!.toJson());
 
+    await fetchWatchListLists();
+
     List<String> seriesWatchlistNames = [];
     for (var val in SeriesWatchLists.values) {
       seriesWatchlistNames.add(DataUtils.getSeriesWatchlistStringFromEnum(val));
@@ -80,7 +82,6 @@ class SeriesWatchListProvider extends ChangeNotifier {
         break;
       }
     }
-    fetchWatchListLists();
   }
 
   Future<void> addNewSeriesToWatchList(
@@ -118,5 +119,6 @@ class SeriesWatchListProvider extends ChangeNotifier {
           selectedSeriesWatchListModel!.toJson());
     }
     await batch.commit();
+    fetchWatchListLists();
   }
 }

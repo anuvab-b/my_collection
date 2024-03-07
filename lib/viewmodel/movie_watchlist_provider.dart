@@ -71,6 +71,8 @@ class MovieWatchListProvider extends ChangeNotifier{
       movieWatchlistNames.add(DataUtils.getMovieWatchlistStringFromEnum(val));
     }
 
+    await fetchMovieWatchlistLists();
+
     for(TmdbMovieResponseModel i in movieWatchLists){
       if(movieWatchlistNames.contains(i?.name)){
         continue;
@@ -80,7 +82,6 @@ class MovieWatchListProvider extends ChangeNotifier{
         break;
       }
     }
-    fetchMovieWatchlistLists();
   }
 
   Future<void> addNewMovieToWatchList(MovieListModel movie, int index) async {
@@ -113,5 +114,6 @@ class MovieWatchListProvider extends ChangeNotifier{
           .doc(selectedMovieWatchListModel!.name), selectedMovieWatchListModel!.toJson());
     }
     await batch.commit();
+    fetchMovieWatchlistLists();
   }
 }
