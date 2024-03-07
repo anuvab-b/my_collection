@@ -1,6 +1,8 @@
 class BookDimens{
   static double listItemHeight = 200.0;
   static double listItemWidth = 150.0;
+  static double readListItemHeight = 180.0;
+  static double readListItemWidth = 180.0;
 }
 
 class MovieDimens{

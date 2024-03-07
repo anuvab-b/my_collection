@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_collection/utils/routes/route_names.dart';
+import 'package:my_collection/utils/routing_utils.dart';
 import 'package:my_collection/view/widgets/common_loader.dart';
 import 'package:my_collection/viewmodel/signup/signup_provider.dart';
 import 'package:provider/provider.dart';
@@ -102,6 +103,7 @@ class SignupScreen extends StatelessWidget {
                                       context,
                                       RouteNames.home,
                                       (Route<dynamic> route) => false);
+                                  RoutingUtils.fetchInitialHomeData(context);
                                 }
                               } else {
                                 if (context.mounted) {
