@@ -166,6 +166,7 @@ class BookDetailsScreen extends StatelessWidget {
                                                 fontSize: 24)),
                                         Expanded(child: ReadingListListView(
                                             onTap: (_) async {
+                                              provider.setSelectedReadingListModel(provider.readingLists[_]);
                                           showDialog(
                                               context: context,
                                               barrierDismissible: false,
