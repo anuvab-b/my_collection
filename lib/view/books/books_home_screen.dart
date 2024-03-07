@@ -27,35 +27,53 @@ class BooksHomeScreen extends StatelessWidget {
                   Consumer<ReadingListProvider>(
                       builder: (context, readListProvider, child) {
                     return readListProvider.readingLists.isNotEmpty
-                        ? SizedBox(
-                            height: 180,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (ctx, index) {
-                                  GoogleBooksApiResponseModel bookModel =
-                                      readListProvider.readingLists[index];
-                                  return Card(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      width: 120,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          const Icon(Icons.book_rounded),
-                                          Text(bookModel.kind,
-                                              style: const TextStyle(
-                                                  fontFamily: "Poppins")),
-                                          Text(
-                                              "${bookModel.items.length} items",
-                                              style: const TextStyle(
-                                                  fontFamily: "Poppins")),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                itemCount:
-                                    readListProvider.readingLists.length))
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 16.0),
+                              SizedBox(
+                                  height: BookDimens.readListItemHeight,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (ctx, index) {
+                                        GoogleBooksApiResponseModel bookModel =
+                                            readListProvider
+                                                .readingLists[index];
+                                        return Container(
+                                          margin:
+                                              const EdgeInsets.only(right: 4.0),
+                                          child: Card(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        12.0)),
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: BookDimens.readListItemWidth,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Icon(
+                                                      Icons.book_rounded),
+                                                  Text(bookModel.kind,
+                                                      style: const TextStyle(
+                                                          fontFamily:
+                                                              "Poppins")),
+                                                  Text(
+                                                      "${bookModel.items.length} items",
+                                                      style: const TextStyle(
+                                                          fontFamily:
+                                                              "Poppins")),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      itemCount: readListProvider
+                                          .readingLists.length)),
+                            ],
+                          )
                         : const SizedBox();
                   }),
                   const SizedBox(height: 16.0),
