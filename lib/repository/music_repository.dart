@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/data/network/network.dart';
+import 'package:my_collection/data/network/secrets.dart';
 import 'package:my_collection/domain/i_music_repository.dart';
 import 'package:my_collection/models/music/artists/spotify_artist_albums.dart';
 import 'package:my_collection/models/music/artists/spotify_artist_details.dart';
@@ -23,8 +24,8 @@ class MusicRepository implements IMusicRepository{
           },
           data: {
             "grant_type": "client_credentials",
-            "client_id": ApiEndpoints.spotifyClientId,
-            "client_secret": ApiEndpoints.spotifyClientSecret
+            "client_id": Secrets.spotifyClientId,
+            "client_secret": Secrets.spotifyClientSecret
           });
       if (res.statusCode == 200) {
         String token = res.data["access_token"];
