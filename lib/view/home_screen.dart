@@ -5,6 +5,7 @@ import 'package:my_collection/view/books/books_home_screen.dart';
 import 'package:my_collection/view/movies/movies_home_screen.dart';
 import 'package:my_collection/view/music/music_home_screen.dart';
 import 'package:my_collection/view/series/series_home_screen.dart';
+import 'package:my_collection/view/widgets/common_text.dart';
 import 'package:my_collection/viewmodel/auth_provider.dart';
 import 'package:my_collection/viewmodel/dark_theme_provider.dart';
 import 'package:my_collection/viewmodel/home_screen_provider.dart';
@@ -19,9 +20,10 @@ class HomeScreen extends StatelessWidget {
       create: (ctx) => HomeScreenProvider(),
       child: Scaffold(
         appBar: AppBar(
+          title: const CommonText(title: "MY COLLECTION",fontWeight: FontWeight.w700,fontSize: 24.0),
           actions: [
             PopupMenuButton(
-                // color: kSelectedListItem,
+                color: Theme.of(context).highlightColor,
                 onSelected: (value) {
                   // controller.onMenuItemSelected(value);
                   if (value == 0) {
