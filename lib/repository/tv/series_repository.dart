@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:my_collection/data/network/api_endpoints.dart';
 import 'package:my_collection/data/network/network.dart';
+import 'package:my_collection/data/network/secrets.dart';
 import 'package:my_collection/domain/i_series_repository.dart';
 import 'package:my_collection/models/tv/tmdb_tv_agg_credits_response_model.dart';
 import 'package:my_collection/models/tv/tmdb_tv_details_response_model.dart';
@@ -13,7 +14,7 @@ class SeriesRepository extends ISeriesRepository{
   Future<Either<String,TmdbTvResponseModel>> fetchAiringToday() async{
     TmdbTvResponseModel airingTodayModel;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/airing_today";
-    String token = ApiEndpoints.tmdbToken;
+    String token = Secrets.tmdbToken;
 
     try {
       var res = await apiHelper.request(url: url, headers: {
@@ -36,7 +37,7 @@ class SeriesRepository extends ISeriesRepository{
   Future<Either<String,TmdbTvResponseModel>> fetchOnTheAir() async{
     TmdbTvResponseModel onTheAirModel;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/on_the_air";
-    String token = ApiEndpoints.tmdbToken;
+    String token = Secrets.tmdbToken;
     try {
       var res = await apiHelper.request(url: url, headers: {
         "Authorization": "Bearer $token"
@@ -58,7 +59,7 @@ class SeriesRepository extends ISeriesRepository{
   Future<Either<String,TmdbTvResponseModel>> fetchPopular()async{
     TmdbTvResponseModel popularModel;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/popular";
-    String token = ApiEndpoints.tmdbToken;
+    String token = Secrets.tmdbToken;
     try {
       var res = await apiHelper.request(url: url, headers: {
         "Authorization": "Bearer $token"
@@ -80,7 +81,7 @@ class SeriesRepository extends ISeriesRepository{
   Future<Either<String,TmdbTvResponseModel>> fetchTopRatedSeries()async{
     TmdbTvResponseModel topRatedModel;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/top_rated";
-    String token = ApiEndpoints.tmdbToken;
+    String token = Secrets.tmdbToken;
     try {
       var res = await apiHelper.request(url: url, headers: {
         "Authorization": "Bearer $token"
@@ -101,7 +102,7 @@ class SeriesRepository extends ISeriesRepository{
   @override
   Future<Either<String,TmdbTvResponseModel>> getTvSearchResults(String query)async{
     TmdbTvResponseModel topRatedModel;
-    String token = ApiEndpoints.tmdbApiKey;
+    String token = Secrets.tmdbApiKey;
     String url = "${ApiEndpoints.tmdbBaseUrl}search/tv?query=$query&api_key=$token";
 
     try {
@@ -122,7 +123,7 @@ class SeriesRepository extends ISeriesRepository{
   @override
   Future<Either<String,TmdbTvAggCreditsResponseModel>> getSeriesAggCredits(String seriesId) async{
     TmdbTvAggCreditsResponseModel creditsResponseModel;
-    String token = ApiEndpoints.tmdbApiKey;
+    String token = Secrets.tmdbApiKey;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/$seriesId/aggregate_credits?api_key=$token";
 
     try {
@@ -143,7 +144,7 @@ class SeriesRepository extends ISeriesRepository{
   @override
   Future<Either<String,TmdbTvDetailsResponseModel>> getSeriesDetails(String seriesId) async{
     TmdbTvDetailsResponseModel responseModel;
-    String token = ApiEndpoints.tmdbApiKey;
+    String token = Secrets.tmdbApiKey;
     String url = "${ApiEndpoints.tmdbBaseUrl}tv/$seriesId?api_key=$token";
 
     try {
