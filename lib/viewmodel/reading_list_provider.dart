@@ -65,6 +65,9 @@ class ReadingListProvider extends ChangeNotifier {
     for (var val in BookShelves.values){
       readingListNames.add(DataUtils.getBookshelfStringFromEnum(val));
     }
+
+    await fetchReadingLists();
+
     for (GoogleBooksApiResponseModel i in readingLists){
       if(readingListNames.contains(i.kind)){
         continue;
@@ -73,8 +76,6 @@ class ReadingListProvider extends ChangeNotifier {
         createBatchReadingList();
       }
     }
-
-    fetchReadingLists();
   }
 
   Future<void> createBatchReadingList() async {
@@ -92,6 +93,7 @@ class ReadingListProvider extends ChangeNotifier {
           .doc(selectedReadingListModel.kind), selectedReadingListModel.toJson());
     }
     await batch.commit();
+    fetchReadingLists();
   }
 
   Future<void> addNewBookToReadingList(BookListItem book) async {
