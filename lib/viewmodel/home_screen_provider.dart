@@ -6,6 +6,7 @@ import 'package:my_collection/viewmodel/music_provider.dart';
 import 'package:my_collection/viewmodel/playlist_provider.dart';
 import 'package:my_collection/viewmodel/reading_list_provider.dart';
 import 'package:my_collection/viewmodel/series_provider.dart';
+import 'package:my_collection/viewmodel/series_watchlist_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreenProvider extends ChangeNotifier{
@@ -31,8 +32,10 @@ class HomeScreenProvider extends ChangeNotifier{
       }
       else if (index == 2) {
         SeriesProvider seriesProvider = Provider.of<SeriesProvider>(context, listen: false);
-        // TODO: fetchWatchListLists
+        SeriesWatchListProvider seriesWatchListProvider = Provider.of<SeriesWatchListProvider>(context,listen: false);
+
         seriesProvider.fetchSeriesHomeData();
+        seriesWatchListProvider.fetchWatchListLists();
       }
 
       else if (index == 3) {
