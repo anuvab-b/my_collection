@@ -117,7 +117,8 @@ class BookSearchDelegate extends SearchDelegate {
                                               fontSize: 24)),
                                       Expanded(child:
                                           ReadingListListView(onTap: (_) async {
-                                        showDialog(
+                                            provider.setSelectedReadingListModel(provider.readingLists[_]);
+                                            showDialog(
                                             context: context,
                                             barrierDismissible: false,
                                             barrierColor: Colors.transparent,

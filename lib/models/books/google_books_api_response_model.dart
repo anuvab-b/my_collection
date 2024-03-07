@@ -256,7 +256,7 @@ class VolumeInfo {
 
   Map<String, dynamic> toJson() => {
     "title": title,
-    "publishedDate": publishedDate,
+    "publishedDate": DateUtils.formatDateTime(publishedDate),
     "description": description,
     "readingModes": readingModes.toJson(),
     "pageCount": pageCount,
