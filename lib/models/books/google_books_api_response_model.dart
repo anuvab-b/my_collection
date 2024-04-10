@@ -236,7 +236,7 @@ class VolumeInfo {
     subtitle: json["subtitle"],
     authors: json["authors"] == null ? [] : List<String>.from(json["authors"]!.map((x) => x)),
     categories: json["categories"] == null ? [] : List<String>.from(json["categories"]!.map((x) => x)),
-    publishedDate: (json["publishedDate"] == null || json["publishedDate"].length<10) ? null : DateUtils.getDateTime(json["publishedDate"]),
+    publishedDate: (json["publishedDate"] == null || json["publishedDate"].toString().length<10) ? null : DateUtils.getDateTime("${json["publishedDate"]}"),
     description: json["description"],
     readingModes: ReadingModes.fromJson(json["readingModes"]),
     pageCount: json["pageCount"],

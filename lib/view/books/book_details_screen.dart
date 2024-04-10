@@ -40,29 +40,32 @@ class BookDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 32.0),
-                    Center(
-                      child: SizedBox(
-                          width: 300,
-                          height: 400,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              errorWidget: (context, value, value2) {
-                                return const CommonPlaceholderNetworkImage();
-                              },
-                              fit: BoxFit.fill,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColorLight,
-                                  value: progress.progress,
+                    Hero(
+                      tag: book?.id ?? "",
+                      child: Center(
+                        child: SizedBox(
+                            width: 300,
+                            height: 400,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                errorWidget: (context, value, value2) {
+                                  return const CommonPlaceholderNetworkImage();
+                                },
+                                fit: BoxFit.fill,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Theme.of(context).primaryColorLight,
+                                    value: progress.progress,
+                                  ),
                                 ),
+                                imageUrl:
+                                    "https://books.google.com/books/publisher/content/images/frontcover/${book?.id}?fife=w400-h600&source=gbs_api}"
+                                    "${book?.volumeInfo.imageLinks?.thumbnail}",
                               ),
-                              imageUrl:
-                                  "https://books.google.com/books/publisher/content/images/frontcover/${book?.id}?fife=w400-h600&source=gbs_api}"
-                                  "${book?.volumeInfo.imageLinks?.thumbnail}",
-                            ),
-                          )),
+                            )),
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(
@@ -77,12 +80,12 @@ class BookDetailsScreen extends StatelessWidget {
                               fontWeight: FontWeight.w700),
                           CommonText(
                               title:
-                                  "By ${DataUtils.getAuthorNamesStringFromList(book?.volumeInfo?.authors)}",
+                                  "By ${DataUtils.getAuthorNamesStringFromList(book?.volumeInfo.authors)}",
                               color: Theme.of(context).primaryColorLight,
                               fontSize: 16.0),
                           const SizedBox(height: 16.0),
                           CommonText(
-                              title: "${book?.volumeInfo?.pageCount} pages",
+                              title: "${book?.volumeInfo.pageCount} pages",
                               color: Colors.white,
                               fontSize: 14.0),
                           const SizedBox(height: 16.0),
