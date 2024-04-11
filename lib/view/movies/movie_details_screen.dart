@@ -40,28 +40,31 @@ class MovieDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 32.0),
-                    Center(
-                      child: SizedBox(
-                          width: 300,
-                          height: 400,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: CachedNetworkImage(
-                              errorWidget: (context, value, value2) {
-                                return const CommonPlaceholderNetworkImage();
-                              },
-                              fit: BoxFit.fill,
-                              progressIndicatorBuilder:
-                                  (context, url, progress) => Center(
-                                child: CircularProgressIndicator(
-                                  color: Theme.of(context).primaryColorLight,
-                                  value: progress.progress,
+                    Hero(
+                      tag: "${ApiEndpoints.tmdbPosterPath}${movie?.posterPath}",
+                      child: Center(
+                        child: SizedBox(
+                            width: 300,
+                            height: 400,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: CachedNetworkImage(
+                                errorWidget: (context, value, value2) {
+                                  return const CommonPlaceholderNetworkImage();
+                                },
+                                fit: BoxFit.fill,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                    color: Theme.of(context).primaryColorLight,
+                                    value: progress.progress,
+                                  ),
                                 ),
+                                imageUrl:
+                                    "${ApiEndpoints.tmdbPosterPath}${movie?.posterPath}",
                               ),
-                              imageUrl:
-                                  "${ApiEndpoints.tmdbPosterPath}${movie?.posterPath}",
-                            ),
-                          )),
+                            )),
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(

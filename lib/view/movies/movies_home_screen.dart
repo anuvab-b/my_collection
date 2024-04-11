@@ -220,23 +220,26 @@ class HorizontalMoviePosterListViewSection extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                  height: 180,
-                                  width: 180,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.fill,
-                                      progressIndicatorBuilder:
-                                          (context, url, progress) => Center(
-                                        child: CircularProgressIndicator(
-                                          value: progress.progress,
+                              Hero(
+                                tag: "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
+                                child: SizedBox(
+                                    height: 180,
+                                    width: 180,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.fill,
+                                        progressIndicatorBuilder:
+                                            (context, url, progress) => Center(
+                                          child: CircularProgressIndicator(
+                                            value: progress.progress,
+                                          ),
                                         ),
+                                        imageUrl:
+                                            "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
                                       ),
-                                      imageUrl:
-                                          "${ApiEndpoints.tmdbPosterPath}${movie.posterPath}",
-                                    ),
-                                  )),
+                                    )),
+                              ),
                               const SizedBox(height: 4.0),
                               Text(
                                 movie.title ?? "",
